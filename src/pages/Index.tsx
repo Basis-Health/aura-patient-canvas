@@ -29,6 +29,7 @@ const mockPatient = {
   age: 30,
   email: "georgeallidis@gmail.com",
   location: "Asia/Nicosia",
+  birthdate: "April 15, 1995", // Added the missing birthdate property
   avatarUrl: "/lovable-uploads/1ca07b90-534f-4849-83c5-906dee56f04c.png"
 };
 
@@ -88,7 +89,7 @@ const mockProtocol = {
   items: [
     {
       id: "1",
-      type: 'supplement',
+      type: 'supplement' as const, // Added 'as const' to match the expected union type
       name: "Berberine 500mg",
       schedule: "3x daily with meals",
       adherence: 85,
@@ -97,7 +98,7 @@ const mockProtocol = {
     },
     {
       id: "2",
-      type: 'exercise',
+      type: 'exercise' as const, // Added 'as const' to match the expected union type
       name: "Zone 2 Cardio",
       schedule: "30 min, 3x weekly",
       adherence: 45,
@@ -106,7 +107,7 @@ const mockProtocol = {
     },
     {
       id: "3",
-      type: 'lifestyle',
+      type: 'lifestyle' as const, // Added 'as const' to match the expected union type
       name: "Sleep optimization",
       schedule: "8hrs nightly, 10pm-6am",
       adherence: 62,
@@ -115,7 +116,7 @@ const mockProtocol = {
     },
     {
       id: "4",
-      type: 'diet',
+      type: 'diet' as const, // Added 'as const' to match the expected union type
       name: "Low carb high protein",
       schedule: "Daily",
       adherence: 91,

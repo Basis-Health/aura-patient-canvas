@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Sheet, 
@@ -26,7 +25,8 @@ import {
   Heart,
   Brain,
   Clock,
-  BarChart
+  BarChart,
+  Moon
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 
@@ -47,7 +47,6 @@ interface ProtocolDrawerProps {
 const ProtocolDrawer: React.FC<ProtocolDrawerProps> = ({ onAddProtocol, onAddHabit }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Mock protocols by objective
   const protocols: Record<string, Protocol[]> = {
     metabolic: [
       {
@@ -109,14 +108,12 @@ const ProtocolDrawer: React.FC<ProtocolDrawerProps> = ({ onAddProtocol, onAddHab
     ],
   };
 
-  // Habit categories
   const habitTypes = [
     { id: 'supplement', name: 'Supplement', icon: <Pill className="h-5 w-5" /> },
     { id: 'exercise', name: 'Exercise', icon: <Dumbbell className="h-5 w-5" /> },
     { id: 'nutrition', name: 'Meal', icon: <Apple className="h-5 w-5" /> },
   ];
 
-  // Filter protocols based on search
   const filteredProtocols = Object.values(protocols)
     .flat()
     .filter(
