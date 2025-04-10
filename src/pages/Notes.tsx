@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import PatientHeader from '@/components/patient/PatientHeader';
@@ -7,9 +6,8 @@ import { NotesList } from '@/components/notes/NotesList';
 import { NoteEditor } from '@/components/notes/NoteEditor';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
-import { Note } from '@/types/notes';
+import { Note, NoteStatus } from '@/types/notes';
 
-// Mock patient data (same as in Index.tsx)
 const mockPatient = {
   name: "George Georgallides",
   age: 30,
@@ -19,7 +17,6 @@ const mockPatient = {
   avatarUrl: "/lovable-uploads/1ca07b90-534f-4849-83c5-906dee56f04c.png"
 };
 
-// Mock notes data
 const mockNotes: Note[] = [
   {
     id: "1",
@@ -71,16 +68,14 @@ const Notes = () => {
 
   const handleSaveNote = (note: Note) => {
     if (note.id) {
-      // Update existing note
       setNotes(notes.map(n => n.id === note.id ? note : n));
     } else {
-      // Add new note with generated ID
       const newNote = {
         ...note,
         id: `${Date.now()}`,
         createdAt: new Date().toISOString(),
-        createdBy: "Dr. Current User", // This would come from authentication in a real app
-        status: "active"
+        createdBy: "Dr. Current User",
+        status: "active" as NoteStatus
       };
       setNotes([newNote, ...notes]);
     }
