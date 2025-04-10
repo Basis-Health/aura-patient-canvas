@@ -5,6 +5,7 @@ import {
   ChevronRight, Users, Calendar, LineChart, Beaker, FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -18,11 +19,15 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
       <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 space-y-8">
         <div className="flex flex-col items-center space-y-8">
           <ChevronLeft className="h-5 w-5 text-gray-500" />
-          <Users className="h-5 w-5 text-gray-500" />
+          <Link to="/">
+            <Users className="h-5 w-5 text-gray-500 hover:text-primary transition-colors" />
+          </Link>
           <Calendar className="h-5 w-5 text-gray-500" />
-          <LineChart className="h-5 w-5 text-primary" />
+          <LineChart className="h-5 w-5 text-gray-500" />
           <Beaker className="h-5 w-5 text-gray-500" />
-          <FileText className="h-5 w-5 text-gray-500" />
+          <Link to="/notes">
+            <FileText className="h-5 w-5 text-gray-500 hover:text-primary transition-colors" />
+          </Link>
         </div>
         <div className="mt-auto">
           <Settings className="h-5 w-5 text-gray-500" />
