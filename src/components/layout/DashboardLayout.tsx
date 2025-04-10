@@ -1,12 +1,12 @@
 
 import React from "react";
 import { 
-  Search, Bell, MessageSquare, Settings, Clock, ChevronLeft, 
-  ChevronRight, Users, Calendar, LineChart, Beaker, FileText,
-  Bot, MessageCircle
+  Search, Bell, MessageSquare, Settings, ChevronLeft, 
+  Users, Calendar, LineChart, Beaker, FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import ChatButtons from "../chat/ChatSheets";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -60,10 +60,6 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <MessageSquare className="h-5 w-5 text-gray-500" />
             </div>
             <Settings className="h-5 w-5 text-gray-500" />
-            <div className="flex items-center space-x-1">
-              <Clock className="h-5 w-5 text-gray-500" />
-              <span className="text-sm text-gray-700">3:54 pm</span>
-            </div>
           </div>
         </header>
 
@@ -74,18 +70,8 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
         </main>
       </div>
 
-      {/* Sticky Chat Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-4">
-        {/* Copilot Chat Button */}
-        <button className="bg-primary hover:bg-primary/90 text-white p-3 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105">
-          <Bot className="h-6 w-6" />
-        </button>
-        
-        {/* Client Chat Button */}
-        <button className="bg-white hover:bg-gray-100 text-primary border border-gray-200 p-3 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105">
-          <MessageCircle className="h-6 w-6" />
-        </button>
-      </div>
+      {/* Chat Buttons */}
+      <ChatButtons />
     </div>
   );
 };
