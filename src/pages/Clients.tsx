@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface Client {
   id: string;
@@ -105,11 +106,16 @@ const mockClients: Client[] = [
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [clients, setClients] = useState<Client[]>(mockClients);
+  const navigate = useNavigate();
 
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     client.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleViewClient = (clientId: string) => {
+    navigate('/'); // Navigate to the patient profile page
+  };
 
   return (
     <DashboardLayout title="Clients">
@@ -151,7 +157,11 @@ const Clients = () => {
                 </TableHeader>
                 <TableBody>
                   {filteredClients.map((client) => (
-                    <TableRow key={client.id}>
+                    <TableRow 
+                      key={client.id} 
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleViewClient(client.id)}
+                    >
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-3">
                           <Avatar className={`${client.avatarColor} h-9 w-9`}>
@@ -175,13 +185,28 @@ const Clients = () => {
                       <TableCell>{client.joinedDate}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon">
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewClient(client.id);
+                            }}
+                          >
                             <EyeIcon className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <DownloadIcon className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreVerticalIcon className="h-4 w-4" />
                           </Button>
                         </div>
