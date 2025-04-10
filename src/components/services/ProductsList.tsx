@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { 
   Plus, Edit, Trash2, DollarSign, EyeOff, Eye, 
@@ -446,16 +447,16 @@ const ProductsList = () => {
                     Stripe Product
                   </Label>
                   <Select
-                    value={newProduct.stripeProductId || ""}
+                    value={newProduct.stripeProductId || "none"}
                     onValueChange={(value) =>
-                      setNewProduct({ ...newProduct, stripeProductId: value })
+                      setNewProduct({ ...newProduct, stripeProductId: value === "none" ? null : value })
                     }
                   >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Select a product" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Create new product</SelectItem>
+                      <SelectItem value="none">Create new product</SelectItem>
                       {mockStripeProducts.map((product) => (
                         <SelectItem key={product.id} value={product.id}>
                           {product.name} - ${product.price}
@@ -470,16 +471,16 @@ const ProductsList = () => {
                     Payment Link
                   </Label>
                   <Select
-                    value={newProduct.stripePaymentLink || ""}
+                    value={newProduct.stripePaymentLink || "none"}
                     onValueChange={(value) =>
-                      setNewProduct({ ...newProduct, stripePaymentLink: value })
+                      setNewProduct({ ...newProduct, stripePaymentLink: value === "none" ? null : value })
                     }
                   >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Select a payment link" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No payment link</SelectItem>
+                      <SelectItem value="none">No payment link</SelectItem>
                       {mockStripePaymentLinks.map((link) => (
                         <SelectItem key={link.id} value={link.url}>
                           {link.name}
