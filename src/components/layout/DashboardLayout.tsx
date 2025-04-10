@@ -2,10 +2,11 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
-  Users, Calendar, LineChart, Beaker, FileText
+  Users, Calendar, LineChart, Beaker, FileText, 
+  LayoutGrid, UserCog, Building, Package2, TruckIcon, Star
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ChatButtons from "../chat/ChatSheets";
 
 interface DashboardLayoutProps {
@@ -14,20 +15,55 @@ interface DashboardLayoutProps {
 }
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
+  const location = useLocation();
+
   return (
     <div className="min-h-screen bg-gray-50 flex relative">
       {/* Sidebar */}
       <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 space-y-8">
         <div className="flex flex-col items-center space-y-8">
           <ChevronLeft className="h-5 w-5 text-gray-500" />
-          <Link to="/">
-            <Users className="h-5 w-5 text-gray-500 hover:text-primary transition-colors" />
+          <Link to="/clients">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/clients" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <Users className="h-5 w-5" />
+            </div>
           </Link>
-          <Calendar className="h-5 w-5 text-gray-500" />
-          <LineChart className="h-5 w-5 text-gray-500" />
-          <Beaker className="h-5 w-5 text-gray-500" />
+          <Link to="/">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <LayoutGrid className="h-5 w-5" />
+            </div>
+          </Link>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <Calendar className="h-5 w-5" />
+          </div>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <UserCog className="h-5 w-5" />
+          </div>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <Building className="h-5 w-5" />
+          </div>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <TruckIcon className="h-5 w-5" />
+          </div>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <Package2 className="h-5 w-5" />
+          </div>
+          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
+            <Star className="h-5 w-5" />
+          </div>
           <Link to="/notes">
-            <FileText className="h-5 w-5 text-gray-500 hover:text-primary transition-colors" />
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/notes" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <FileText className="h-5 w-5" />
+            </div>
           </Link>
         </div>
         <div className="mt-auto">
