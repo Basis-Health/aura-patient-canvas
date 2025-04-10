@@ -127,5 +127,4 @@ const Index = () => {
   );
 };
 
-// Add default export
 export default Index;
