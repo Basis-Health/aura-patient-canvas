@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import PatientHeader from '@/components/patient/PatientHeader';
@@ -25,13 +24,12 @@ import MetricDetailDrawer from '@/components/metrics/MetricDetailDrawer';
 import DayViewGraph from '@/components/planner/DayViewGraph';
 import ActivityDetailDrawer from '@/components/activity/ActivityDetailDrawer';
 
-// Mock data for the demo
 const mockPatient = {
   name: "George Georgallides",
   age: 30,
   email: "georgeallidis@gmail.com",
   location: "Asia/Nicosia",
-  birthdate: "April 15, 1995", // Added the missing birthdate property
+  birthdate: "April 15, 1995",
   avatarUrl: "/lovable-uploads/1ca07b90-534f-4849-83c5-906dee56f04c.png"
 };
 
@@ -260,7 +258,6 @@ const mockScores = {
   biologicalAge: 27
 };
 
-// Sample day view data
 const mockDayViewData = {
   heartRate: [
     { time: "03:00 AM", value: 62 },
@@ -350,7 +347,6 @@ const Index = () => {
     setIsActivityDrawerOpen(true);
   };
 
-  // Filter metrics based on selected category
   const getFilteredMetrics = () => {
     if (!activeMetricFilter) return [
       { name: "VO2 Max", value: 45, category: "cardiovascular" },
@@ -375,7 +371,6 @@ const Index = () => {
     ].filter(metric => metric.category === activeMetricFilter);
   };
 
-  // Modified layout for the summary page
   const renderSummaryPage = () => {
     return (
       <>
@@ -388,7 +383,7 @@ const Index = () => {
           />
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-3 space-y-6">
               <PatientProtocol protocol={mockProtocol} />
               
               <div className="space-y-6">
@@ -398,31 +393,6 @@ const Index = () => {
                   onSeeMore={handleSeeMoreActivities}
                 />
                 <InsightCards insights={mockInsights} />
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">Activity Score</div>
-                  <div className="text-2xl font-bold">{mockScores.activity}</div>
-                  <div className="text-xs text-gray-500">Last 30 days</div>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">Sleep Score</div>
-                  <div className="text-2xl font-bold">{mockScores.sleep}</div>
-                  <div className="text-xs text-gray-500">Last 30 days</div>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">Readiness Score</div>
-                  <div className="text-2xl font-bold">{mockScores.readiness}</div>
-                  <div className="text-xs text-gray-500">Last 30 days</div>
-                </div>
-                <div className="bg-white p-4 rounded-lg border border-gray-200">
-                  <div className="text-xs text-gray-500 mb-1">Biological Age</div>
-                  <div className="text-2xl font-bold">{mockScores.biologicalAge}</div>
-                  <div className="text-xs text-gray-500">3 yrs younger</div>
-                </div>
               </div>
             </div>
           </div>

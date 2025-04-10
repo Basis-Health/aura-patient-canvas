@@ -1,7 +1,9 @@
 
 import React from "react";
-import { X } from "lucide-react";
+import { X, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import SummaryCustomizationDrawer from "./SummaryCustomizationDrawer";
 
 interface PatientHeaderProps {
   patient: {
@@ -35,6 +37,17 @@ const PatientHeader = ({ patient, onClose }: PatientHeaderProps) => {
         <div>
           <h2 className="text-2xl font-bold">{patient.name}</h2>
         </div>
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button className="p-2 rounded-md hover:bg-gray-100 transition-colors flex items-center gap-2 text-sm font-medium text-gray-600">
+              <SlidersHorizontal className="h-4 w-4" />
+              Customize View
+            </button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <SummaryCustomizationDrawer />
+          </DrawerContent>
+        </Drawer>
       </div>
     </div>
   );
