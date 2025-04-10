@@ -11,6 +11,10 @@ import BiologicalAgeCard from '@/components/biomarkers/BiologicalAgeCard';
 import BiomarkersVisualizer from '@/components/biomarkers/BiomarkersVisualizer';
 import PatientGoals from '@/components/goals/PatientGoals';
 import SchedulePlanner from '@/components/planner/SchedulePlanner';
+import BiomarkerQuickFilters from '@/components/biomarkers/BiomarkerQuickFilters';
+import PatientProtocol from '@/components/protocol/PatientProtocol';
+import ActivityFeed from '@/components/activity/ActivityFeed';
+import InsightCards from '@/components/insights/InsightCards';
 
 // Mock data for the demo
 const mockPatient = {
@@ -68,6 +72,177 @@ const mockEvents = [
   { id: "2", title: "HIIT", start: "09:30 AM", end: "10:00 AM", type: "HIIT" },
 ];
 
+const mockProtocol = {
+  id: "1",
+  name: "Metabolic Health Protocol",
+  startDate: "Feb 12, 2025",
+  adherence: 76,
+  status: 'active',
+  items: [
+    {
+      id: "1",
+      type: 'supplement',
+      name: "Berberine 500mg",
+      schedule: "3x daily with meals",
+      adherence: 85,
+      targetBiomarkers: ["HbA1c", "Fasting Glucose", "Insulin"],
+      impact: 'positive'
+    },
+    {
+      id: "2",
+      type: 'exercise',
+      name: "Zone 2 Cardio",
+      schedule: "30 min, 3x weekly",
+      adherence: 45,
+      targetBiomarkers: ["VO2 Max", "Resting Heart Rate"],
+      impact: 'positive'
+    },
+    {
+      id: "3",
+      type: 'lifestyle',
+      name: "Sleep optimization",
+      schedule: "8hrs nightly, 10pm-6am",
+      adherence: 62,
+      targetBiomarkers: ["Cortisol", "HRV"],
+      impact: 'neutral'
+    },
+    {
+      id: "4",
+      type: 'diet',
+      name: "Low carb high protein",
+      schedule: "Daily",
+      adherence: 91,
+      targetBiomarkers: ["LDL", "HDL", "Triglycerides"],
+      impact: 'positive'
+    }
+  ]
+};
+
+const mockActivities = [
+  {
+    id: "1",
+    type: 'document',
+    title: "New Blood Test Results",
+    description: "Comprehensive metabolic panel uploaded",
+    date: "Apr 9, 2025",
+    link: "/documents/1"
+  },
+  {
+    id: "2",
+    type: 'biomarker',
+    title: "Out of Range Biomarkers",
+    description: "2 biomarkers are out of range",
+    date: "Apr 8, 2025",
+    status: "warning",
+    details: {
+      biomarkers: [
+        { 
+          id: "1", 
+          name: "LDL Cholesterol", 
+          value: "150.2 mg/dL", 
+          status: "Out of Range" 
+        },
+        { 
+          id: "2", 
+          name: "Free T4 (Thyroxine)", 
+          value: "16.7 pg/mL", 
+          status: "Out of Range" 
+        }
+      ]
+    }
+  },
+  {
+    id: "3",
+    type: 'note',
+    title: "Note from Dr. Anant",
+    description: "Recommendations for adjusting protocol",
+    date: "Apr 6, 2025"
+  },
+  {
+    id: "4",
+    type: 'appointment',
+    title: "Appointment Scheduled",
+    description: "Follow-up video call on April 23, 2:00 PM",
+    date: "Apr 5, 2025"
+  },
+  {
+    id: "5",
+    type: 'protocol',
+    title: "Protocol Updated",
+    description: "Added Magnesium Glycinate 400mg before bed",
+    date: "Apr 2, 2025"
+  }
+];
+
+const mockInsights = [
+  {
+    id: "1",
+    title: "Sleep Duration Trend",
+    description: "Sleep duration is trending upward over the last 30 days",
+    trend: "up",
+    percentage: 12,
+    timeframe: "Last 30 days",
+    type: "metric",
+    chartData: [
+      { date: "Mar 10", value: 6.2 },
+      { date: "Mar 15", value: 6.4 },
+      { date: "Mar 20", value: 6.8 },
+      { date: "Mar 25", value: 7.1 },
+      { date: "Mar 30", value: 7.3 },
+      { date: "Apr 5", value: 7.6 },
+      { date: "Apr 10", value: 7.8 },
+    ]
+  },
+  {
+    id: "2",
+    title: "Steps Decreasing",
+    description: "Steps are trending downward by 17% over the last 90 days",
+    trend: "down",
+    percentage: 17,
+    timeframe: "Last 90 days",
+    type: "metric",
+    chartData: [
+      { date: "Jan 10", value: 9500 },
+      { date: "Jan 25", value: 9100 },
+      { date: "Feb 10", value: 8800 },
+      { date: "Feb 25", value: 8200 },
+      { date: "Mar 10", value: 7900 },
+      { date: "Mar 25", value: 7600 },
+      { date: "Apr 10", value: 7100 },
+    ]
+  },
+  {
+    id: "3",
+    title: "Protocol Adherence",
+    description: "Berberine supplementation adherence is improving",
+    trend: "up",
+    timeframe: "Last 45 days",
+    type: "adherence",
+    chartData: [
+      { date: "Feb 25", value: 65 },
+      { date: "Mar 5", value: 70 },
+      { date: "Mar 15", value: 72 },
+      { date: "Mar 25", value: 78 },
+      { date: "Apr 5", value: 82 },
+      { date: "Apr 10", value: 85 },
+    ]
+  },
+  {
+    id: "4",
+    title: "HbA1c Improvement",
+    description: "HbA1c reduced from 5.9 to 5.6 in 3 months",
+    trend: "down",
+    timeframe: "Last 3 months",
+    type: "biomarker",
+    chartData: [
+      { date: "Jan 10", value: 5.9 },
+      { date: "Feb 10", value: 5.8 },
+      { date: "Mar 10", value: 5.7 },
+      { date: "Apr 10", value: 5.6 },
+    ]
+  }
+];
+
 const Index = () => {
   const [activeTab, setActiveTab] = useState("Summary");
   const [activeDocumentCategory, setActiveDocumentCategory] = useState("All Files");
@@ -112,8 +287,31 @@ const Index = () => {
           
           {activeTab === "Summary" && (
             <div className="mt-6">
+              <BiomarkerQuickFilters 
+                outOfRange={3}
+                inRange={22}
+                optimal={5}
+                labResults={mockLabResults}
+              />
+              
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
+                  <PatientProtocol protocol={mockProtocol} />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <ActivityFeed activities={mockActivities} />
+                    <div className="space-y-6">
+                      <InsightCards insights={mockInsights} />
+                      <BiologicalAgeCard
+                        biologicalAge={26}
+                        chronologicalAge={28.5}
+                        difference={2.5}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
                   <BiomarkersVisualizer
                     total={345}
                     outOfRange={12}
@@ -128,38 +326,6 @@ const Index = () => {
                     date="July 1, 2024"
                     goals="Hello Jacob, I've prioritized these specific health goals to optimize your muscle tone and physical performance. Feel free to book an intro call if you have any questions."
                   />
-                </div>
-                
-                <div className="space-y-6">
-                  <BiologicalAgeCard
-                    biologicalAge={26}
-                    chronologicalAge={28.5}
-                    difference={2.5}
-                  />
-                  
-                  <div className="bg-gray-800 rounded-lg p-4">
-                    <div className="mb-4">
-                      <div className="text-sm font-medium text-gray-400">Dr. Anant Vingamoor, MD</div>
-                      <div className="text-xs text-gray-500">Supervising Longevity Physician</div>
-                    </div>
-                    
-                    <div className="bg-gray-700 rounded-lg p-3 mb-3">
-                      <div className="text-white text-sm">Hi Dr. Vingamoor. What can I do to reduce my cortisol?</div>
-                    </div>
-                    
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="text-white text-xs">Cortisol</div>
-                      <div className="bg-purple-500 text-white text-xs px-2 py-0.5 rounded-full">Out of range</div>
-                    </div>
-                    
-                    <div className="text-white/70 text-xs mt-3">
-                      For sure! I'm here to answer any questions.
-                    </div>
-                    
-                    <div className="text-white/70 text-xs mt-2">
-                      Cortisol is a hormone that helps you respond to stress. High cortisol can be a sign of too much stress. To reduce your stress levels, try following this protocol:
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
