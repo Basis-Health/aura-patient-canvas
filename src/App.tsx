@@ -8,8 +8,6 @@ import Index from "./pages/Index";
 import Clients from "./pages/Clients";
 import Notes from "./pages/Notes";
 import NotFound from "./pages/NotFound";
-import Preferences from "./pages/Preferences";
-import Billing from "./pages/Billing";
 
 const queryClient = new QueryClient();
 
@@ -23,8 +21,6 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/clients" element={<Clients />} />
-          <Route path="/preferences" element={<Preferences />} />
-          <Route path="/billing" element={<Billing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
