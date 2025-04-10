@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import PatientHeader from '@/components/patient/PatientHeader';
@@ -37,7 +36,7 @@ const mockDocuments = [
   { id: "6", name: "Cholesterol Test.pdf", type: "PDF", category: "labs", size: "761.72 KB", date: "Dec 28, 2023" },
   { id: "7", name: "Exercise Program.pdf", type: "PDF", category: "body", size: "1.29 MB", date: "Nov 19, 2023" },
   { id: "8", name: "CT Scan Results.png", type: "IMAGE", category: "imaging", size: "4.96 MB", date: "Aug 23, 2023" },
-];
+] as const;
 
 const mockLabResults = [
   { id: "1", name: "Thyroid Stimulating Hormone (TSH)", value: "3.42 mIU/L", status: "In Range" },
