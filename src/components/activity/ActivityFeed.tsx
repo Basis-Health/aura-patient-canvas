@@ -7,19 +7,18 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Badge } from '@/components/ui/badge';
 import LabResultItem from '../labs/LabResultItem';
 
-interface ActivityItem {
+export interface ActivityItem {
   id: string;
   type: 'document' | 'biomarker' | 'note' | 'appointment' | 'protocol';
   title: string;
@@ -52,15 +51,15 @@ const ActivityFeed = ({ activities }: ActivityFeedProps) => {
     }
   };
 
-  const renderDrawerContent = (activity: ActivityItem) => {
+  const renderSheetContent = (activity: ActivityItem) => {
     if (activity.type === 'biomarker' && activity.details?.biomarkers) {
       return (
         <>
-          <DrawerHeader>
-            <DrawerTitle>{activity.title}</DrawerTitle>
-            <DrawerDescription>{activity.description}</DrawerDescription>
-          </DrawerHeader>
-          <div className="p-4 space-y-2">
+          <SheetHeader>
+            <SheetTitle>{activity.title}</SheetTitle>
+            <SheetDescription>{activity.description}</SheetDescription>
+          </SheetHeader>
+          <div className="py-6 space-y-2">
             {activity.details.biomarkers.map((biomarker: any) => (
               <LabResultItem 
                 key={biomarker.id}
@@ -76,11 +75,11 @@ const ActivityFeed = ({ activities }: ActivityFeedProps) => {
     
     return (
       <>
-        <DrawerHeader>
-          <DrawerTitle>{activity.title}</DrawerTitle>
-          <DrawerDescription>{activity.description}</DrawerDescription>
-        </DrawerHeader>
-        <div className="p-4">
+        <SheetHeader>
+          <SheetTitle>{activity.title}</SheetTitle>
+          <SheetDescription>{activity.description}</SheetDescription>
+        </SheetHeader>
+        <div className="py-6">
           <p>Additional details not available</p>
         </div>
       </>
@@ -130,23 +129,19 @@ const ActivityFeed = ({ activities }: ActivityFeedProps) => {
                   )}
                   
                   {activity.type === 'biomarker' && activity.details?.biomarkers && (
-                    <Drawer>
-                      <DrawerTrigger asChild>
+                    <Sheet>
+                      <SheetTrigger asChild>
                         <Button variant="ghost" size="sm" className="p-0 h-auto text-xs text-blue-600 hover:text-blue-800">
                           View biomarkers <ArrowRight className="h-3 w-3 ml-1" />
                         </Button>
-                      </DrawerTrigger>
-                      <DrawerContent>
-                        <div className="mx-auto w-full max-w-lg">
-                          {renderDrawerContent(activity)}
-                          <DrawerFooter>
-                            <DrawerClose asChild>
-                              <Button variant="outline">Close</Button>
-                            </DrawerClose>
-                          </DrawerFooter>
-                        </div>
-                      </DrawerContent>
-                    </Drawer>
+                      </SheetTrigger>
+                      <SheetContent side="right" className="w-full sm:max-w-md">
+                        {renderSheetContent(activity)}
+                        <SheetFooter>
+                          <Button variant="outline">Close</Button>
+                        </SheetFooter>
+                      </SheetContent>
+                    </Sheet>
                   )}
                 </div>
               </div>

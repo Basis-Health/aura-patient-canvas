@@ -4,15 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, AlertCircle } from 'lucide-react';
 import { 
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import LabResultItem from '../labs/LabResultItem';
 
 interface BiomarkerQuickFiltersProps {
@@ -37,40 +36,36 @@ const BiomarkerQuickFilters = ({ outOfRange, inRange, optimal, labResults }: Bio
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Biomarker Status</h2>
         
-        <Drawer>
-          <DrawerTrigger asChild>
+        <Sheet>
+          <SheetTrigger asChild>
             <Button variant="outline" size="sm" className="flex items-center gap-1">
               <AlertCircle className="h-4 w-4 text-orange-500" />
               <span>{outOfRange} Out of Range</span>
               <ArrowRight className="h-3 w-3 ml-1" />
             </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <div className="mx-auto w-full max-w-lg">
-              <DrawerHeader>
-                <DrawerTitle>Out of Range Biomarkers</DrawerTitle>
-                <DrawerDescription>
-                  {outOfRange} biomarkers are currently out of range for this client
-                </DrawerDescription>
-              </DrawerHeader>
-              <div className="p-4 space-y-2">
-                {outOfRangeResults.map(result => (
-                  <LabResultItem 
-                    key={result.id}
-                    name={result.name}
-                    value={result.value}
-                    status={result.status}
-                  />
-                ))}
-              </div>
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-full sm:max-w-md">
+            <SheetHeader>
+              <SheetTitle>Out of Range Biomarkers</SheetTitle>
+              <SheetDescription>
+                {outOfRange} biomarkers are currently out of range for this client
+              </SheetDescription>
+            </SheetHeader>
+            <div className="py-6 space-y-2">
+              {outOfRangeResults.map(result => (
+                <LabResultItem 
+                  key={result.id}
+                  name={result.name}
+                  value={result.value}
+                  status={result.status}
+                />
+              ))}
             </div>
-          </DrawerContent>
-        </Drawer>
+            <SheetFooter>
+              <Button variant="outline">Close</Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
       
       <div className="grid grid-cols-3 gap-3">

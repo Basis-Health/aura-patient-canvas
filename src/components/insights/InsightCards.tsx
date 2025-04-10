@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, X, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Check, X } from 'lucide-react';
 import LineChart from '../charts/LineChart';
 
-interface Insight {
+export interface Insight {
   id: string;
   title: string;
   description: string;

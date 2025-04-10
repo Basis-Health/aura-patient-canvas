@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import PatientHeader from '@/components/patient/PatientHeader';
@@ -9,19 +10,25 @@ import LabResultItem from '@/components/labs/LabResultItem';
 import LineChart from '@/components/charts/LineChart';
 import BiologicalAgeCard from '@/components/biomarkers/BiologicalAgeCard';
 import BiomarkersVisualizer from '@/components/biomarkers/BiomarkersVisualizer';
-import PatientGoals from '@/components/goals/PatientGoals';
-import SchedulePlanner from '@/components/planner/SchedulePlanner';
 import BiomarkerQuickFilters from '@/components/biomarkers/BiomarkerQuickFilters';
+import SchedulePlanner from '@/components/planner/SchedulePlanner';
 import PatientProtocol from '@/components/protocol/PatientProtocol';
 import ActivityFeed from '@/components/activity/ActivityFeed';
 import InsightCards from '@/components/insights/InsightCards';
+import { Insight } from '@/components/insights/InsightCards';
+import { ActivityItem } from '@/components/activity/ActivityFeed';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import ProtocolDrawer from '@/components/planner/ProtocolDrawer';
+import EventDetailDrawer from '@/components/planner/EventDetailDrawer';
+import MetricDetailDrawer from '@/components/metrics/MetricDetailDrawer';
 
 // Mock data for the demo
 const mockPatient = {
-  name: "George",
+  name: "George Georgallides",
+  age: 30,
   email: "georgeallidis@gmail.com",
   location: "Asia/Nicosia",
-  birthdate: "Jun 14 1985",
   avatarUrl: "/lovable-uploads/1ca07b90-534f-4849-83c5-906dee56f04c.png"
 };
 
@@ -52,13 +59,13 @@ const mockDocuments: Document[] = [
 ];
 
 const mockLabResults = [
-  { id: "1", name: "Thyroid Stimulating Hormone (TSH)", value: "3.42 mIU/L", status: "In Range" },
-  { id: "2", name: "Free T4 (Thyroxine)", value: "16.7 pg/mL", status: "Out of Range" },
-  { id: "3", name: "Total Cholesterol", value: "224.0 mg/dL", status: "Out of Range" },
-  { id: "4", name: "HDL Cholesterol", value: "57.6 mg/dL", status: "In Range" },
-  { id: "5", name: "Triglycerides", value: "81.0 mg/dL", status: "Optimal" },
-  { id: "6", name: "LDL Cholesterol", value: "150.2 mg/dL", status: "Out of Range" },
-  { id: "7", name: "Homocysteine", value: "7.20 μmol/L", status: "In Range" },
+  { id: "1", name: "Thyroid Stimulating Hormone (TSH)", value: "3.42 mIU/L", status: "In Range" as const },
+  { id: "2", name: "Free T4 (Thyroxine)", value: "16.7 pg/mL", status: "Out of Range" as const },
+  { id: "3", name: "Total Cholesterol", value: "224.0 mg/dL", status: "Out of Range" as const },
+  { id: "4", name: "HDL Cholesterol", value: "57.6 mg/dL", status: "In Range" as const },
+  { id: "5", name: "Triglycerides", value: "81.0 mg/dL", status: "Optimal" as const },
+  { id: "6", name: "LDL Cholesterol", value: "150.2 mg/dL", status: "Out of Range" as const },
+  { id: "7", name: "Homocysteine", value: "7.20 μmol/L", status: "In Range" as const },
 ];
 
 const mockChartData = [
@@ -77,7 +84,7 @@ const mockProtocol = {
   name: "Metabolic Health Protocol",
   startDate: "Feb 12, 2025",
   adherence: 76,
-  status: 'active',
+  status: 'active' as const,
   items: [
     {
       id: "1",
@@ -118,7 +125,7 @@ const mockProtocol = {
   ]
 };
 
-const mockActivities = [
+const mockActivities: ActivityItem[] = [
   {
     id: "1",
     type: 'document',
@@ -174,11 +181,11 @@ const mockActivities = [
   }
 ];
 
-const mockInsights = [
+const mockInsights: Insight[] = [
   {
     id: "1",
     title: "Sleep Duration Trend",
-    description: "Sleep duration is trending upward over the last 30 days",
+    description: "George's sleep duration is trending upward over the last 30 days",
     trend: "up",
     percentage: 12,
     timeframe: "Last 30 days",
@@ -248,6 +255,11 @@ const Index = () => {
   const [activeDocumentCategory, setActiveDocumentCategory] = useState("All Files");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calendarView, setCalendarView] = useState<'day' | 'week' | 'month'>('week');
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [isEventDrawerOpen, setIsEventDrawerOpen] = useState(false);
+  const [selectedMetric, setSelectedMetric] = useState<any>(null);
+  const [isMetricDrawerOpen, setIsMetricDrawerOpen] = useState(false);
+  const [activeMetricFilter, setActiveMetricFilter] = useState<string | null>(null);
   
   const handleDocumentUpload = () => {
     console.log("Document upload initiated");
@@ -269,6 +281,41 @@ const Index = () => {
     console.log("Add event clicked");
   };
 
+  const handleEventClick = (event: any) => {
+    setSelectedEvent(event);
+    setIsEventDrawerOpen(true);
+  };
+
+  const handleMetricClick = (metric: any) => {
+    setSelectedMetric(metric);
+    setIsMetricDrawerOpen(true);
+  };
+
+  // Filter metrics based on selected category
+  const getFilteredMetrics = () => {
+    if (!activeMetricFilter) return [
+      { name: "VO2 Max", value: 45, category: "cardiovascular" },
+      { name: "Water", value: "0.4", unit: "L", category: "metabolic" },
+      { name: "Sleep Duration", value: "5h 46m", category: "sleep" },
+      { name: "Resting Heart Rate", value: 59, category: "cardiovascular" },
+      { name: "Blood Pressure", value: "120/80", category: "cardiovascular" },
+      { name: "Steps", value: 7580, category: "activity" },
+      { name: "Active Minutes", value: 32, category: "activity" },
+      { name: "Glucose", value: 86, unit: "mg/dL", category: "metabolic" },
+    ];
+
+    return [
+      { name: "VO2 Max", value: 45, category: "cardiovascular" },
+      { name: "Water", value: "0.4", unit: "L", category: "metabolic" },
+      { name: "Sleep Duration", value: "5h 46m", category: "sleep" },
+      { name: "Resting Heart Rate", value: 59, category: "cardiovascular" },
+      { name: "Blood Pressure", value: "120/80", category: "cardiovascular" },
+      { name: "Steps", value: 7580, category: "activity" },
+      { name: "Active Minutes", value: 32, category: "activity" },
+      { name: "Glucose", value: 86, unit: "mg/dL", category: "metabolic" },
+    ].filter(metric => metric.category === activeMetricFilter);
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
@@ -283,7 +330,7 @@ const Index = () => {
             onChange={setActiveTab}
           />
           
-          <MetricsOverview metrics={mockMetrics} />
+          {activeTab === "Summary" && <MetricsOverview metrics={mockMetrics} />}
           
           {activeTab === "Summary" && (
             <div className="mt-6">
@@ -302,11 +349,6 @@ const Index = () => {
                     <ActivityFeed activities={mockActivities} />
                     <div className="space-y-6">
                       <InsightCards insights={mockInsights} />
-                      <BiologicalAgeCard
-                        biologicalAge={26}
-                        chronologicalAge={28.5}
-                        difference={2.5}
-                      />
                     </div>
                   </div>
                 </div>
@@ -318,14 +360,7 @@ const Index = () => {
                     inRange={71}
                   />
                   
-                  <PatientGoals
-                    doctor={{
-                      name: "Anant Vingamore, MD",
-                      title: "Supervising Longevity Physician"
-                    }}
-                    date="July 1, 2024"
-                    goals="Hello Jacob, I've prioritized these specific health goals to optimize your muscle tone and physical performance. Feel free to book an intro call if you have any questions."
-                  />
+                  <ActivityFeed activities={mockActivities.slice(0, 3)} />
                 </div>
               </div>
             </div>
@@ -334,7 +369,40 @@ const Index = () => {
           {activeTab === "Metrics" && (
             <div className="mt-6">
               <div className="mb-6">
-                <div className="text-xl font-semibold mb-4">39 METRICS</div>
+                <div className="flex justify-between items-center mb-4">
+                  <div className="text-xl font-semibold">Metrics</div>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      variant={activeMetricFilter === 'cardiovascular' ? 'default' : 'outline'} 
+                      size="sm"
+                      onClick={() => setActiveMetricFilter(activeMetricFilter === 'cardiovascular' ? null : 'cardiovascular')}
+                    >
+                      Cardiovascular
+                    </Button>
+                    <Button 
+                      variant={activeMetricFilter === 'metabolic' ? 'default' : 'outline'} 
+                      size="sm"
+                      onClick={() => setActiveMetricFilter(activeMetricFilter === 'metabolic' ? null : 'metabolic')}
+                    >
+                      Metabolic
+                    </Button>
+                    <Button 
+                      variant={activeMetricFilter === 'activity' ? 'default' : 'outline'} 
+                      size="sm"
+                      onClick={() => setActiveMetricFilter(activeMetricFilter === 'activity' ? null : 'activity')}
+                    >
+                      Activity
+                    </Button>
+                    <Button 
+                      variant={activeMetricFilter === 'sleep' ? 'default' : 'outline'} 
+                      size="sm"
+                      onClick={() => setActiveMetricFilter(activeMetricFilter === 'sleep' ? null : 'sleep')}
+                    >
+                      Sleep
+                    </Button>
+                  </div>
+                </div>
                 
                 <div className="space-y-4">
                   <div className="flex items-center">
@@ -360,53 +428,36 @@ const Index = () => {
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div className="metric-card">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium text-gray-500">Today</span>
-                    <div className="bg-black rounded p-0.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 7h18M3 11h18M3 15h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
+                {getFilteredMetrics().map((metric, index) => (
+                  <div 
+                    key={index} 
+                    className="metric-card bg-white p-4 rounded-lg border border-gray-200 cursor-pointer hover:border-blue-300 hover:shadow-sm transition-all"
+                    onClick={() => handleMetricClick(metric)}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-gray-500">Today</span>
+                      <div className="bg-black rounded p-0.5">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path d="M3 7h18M3 11h18M3 15h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-medium text-gray-500">{metric.name}</h4>
+                      <div className="text-2xl font-bold">
+                        {metric.value}
+                        {metric.unit && <span className="text-sm text-gray-500 ml-1">{metric.unit}</span>}
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-medium text-gray-500">Vo2 Max</h4>
-                    <div className="text-2xl font-bold">45</div>
-                  </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium text-gray-500">Today</span>
-                    <div className="bg-blue-500 rounded p-0.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 20V4M4 12h16" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-medium text-gray-500">Water</h4>
-                    <div className="text-2xl font-bold">0.4 L</div>
-                  </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium text-gray-500">Today</span>
-                    <div className="bg-black rounded p-0.5">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 20V4M4 12h16" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-medium text-gray-500">Sleep Duration</h4>
-                    <div className="text-2xl font-bold text-orange-500">5h 46m</div>
-                  </div>
-                </div>
-                
-                {/* More metrics would go here */}
+                ))}
               </div>
+
+              <MetricDetailDrawer
+                isOpen={isMetricDrawerOpen}
+                onClose={() => setIsMetricDrawerOpen(false)}
+                metric={selectedMetric}
+              />
             </div>
           )}
           
@@ -425,7 +476,7 @@ const Index = () => {
                       key={result.id}
                       name={result.name}
                       value={result.value}
-                      status={result.status as any}
+                      status={result.status}
                     />
                   ))}
                 </div>
@@ -472,6 +523,11 @@ const Index = () => {
           
           {activeTab === "Plan" && (
             <div className="mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-semibold">Protocol & Schedule</h2>
+                <ProtocolDrawer />
+              </div>
+              
               <SchedulePlanner
                 currentDate={currentDate}
                 events={mockEvents}
@@ -480,6 +536,13 @@ const Index = () => {
                 onAddEvent={handleAddEvent}
                 view={calendarView}
                 onViewChange={setCalendarView}
+                onEventClick={handleEventClick}
+              />
+              
+              <EventDetailDrawer
+                isOpen={isEventDrawerOpen}
+                onClose={() => setIsEventDrawerOpen(false)}
+                event={selectedEvent}
               />
             </div>
           )}
@@ -495,13 +558,6 @@ const Index = () => {
             </div>
           )}
         </div>
-        
-        {/* Remove the document management section from here since it's now a tab */}
-        {activeTab !== "Documents" && (
-          <div className="mt-8">
-            {/* Any other content that should appear below the main section when not on Documents tab */}
-          </div>
-        )}
       </div>
     </DashboardLayout>
   );
