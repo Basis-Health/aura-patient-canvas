@@ -22,6 +22,8 @@ import { Button } from '@/components/ui/button';
 import ProtocolDrawer from '@/components/planner/ProtocolDrawer';
 import EventDetailDrawer from '@/components/planner/EventDetailDrawer';
 import MetricDetailDrawer from '@/components/metrics/MetricDetailDrawer';
+import DayViewGraph from '@/components/planner/DayViewGraph';
+import ActivityDetailDrawer from '@/components/activity/ActivityDetailDrawer';
 
 // Mock data for the demo
 const mockPatient = {
@@ -89,39 +91,39 @@ const mockProtocol = {
   items: [
     {
       id: "1",
-      type: 'supplement' as const, // Added 'as const' to match the expected union type
+      type: 'supplement' as const,
       name: "Berberine 500mg",
       schedule: "3x daily with meals",
       adherence: 85,
       targetBiomarkers: ["HbA1c", "Fasting Glucose", "Insulin"],
-      impact: 'positive'
+      impact: 'positive' as const
     },
     {
       id: "2",
-      type: 'exercise' as const, // Added 'as const' to match the expected union type
+      type: 'exercise' as const,
       name: "Zone 2 Cardio",
       schedule: "30 min, 3x weekly",
       adherence: 45,
       targetBiomarkers: ["VO2 Max", "Resting Heart Rate"],
-      impact: 'positive'
+      impact: 'positive' as const
     },
     {
       id: "3",
-      type: 'lifestyle' as const, // Added 'as const' to match the expected union type
+      type: 'lifestyle' as const,
       name: "Sleep optimization",
       schedule: "8hrs nightly, 10pm-6am",
       adherence: 62,
       targetBiomarkers: ["Cortisol", "HRV"],
-      impact: 'neutral'
+      impact: 'neutral' as const
     },
     {
       id: "4",
-      type: 'diet' as const, // Added 'as const' to match the expected union type
+      type: 'diet' as const,
       name: "Low carb high protein",
       schedule: "Daily",
       adherence: 91,
       targetBiomarkers: ["LDL", "HDL", "Triglycerides"],
-      impact: 'positive'
+      impact: 'positive' as const
     }
   ]
 };
@@ -251,6 +253,57 @@ const mockInsights: Insight[] = [
   }
 ];
 
+const mockScores = {
+  activity: 83,
+  sleep: 76,
+  readiness: 89,
+  biologicalAge: 27
+};
+
+// Sample day view data
+const mockDayViewData = {
+  heartRate: [
+    { time: "03:00 AM", value: 62 },
+    { time: "06:00 AM", value: 58 },
+    { time: "09:00 AM", value: 72 },
+    { time: "12:00 PM", value: 85 },
+    { time: "03:00 PM", value: 78 },
+    { time: "06:00 PM", value: 76 },
+    { time: "09:00 PM", value: 68 },
+    { time: "12:00 AM", value: 60 },
+  ],
+  glucose: [
+    { time: "03:00 AM", value: 82 },
+    { time: "06:00 AM", value: 78 },
+    { time: "09:00 AM", value: 95 },
+    { time: "12:00 PM", value: 138 },
+    { time: "03:00 PM", value: 110 },
+    { time: "06:00 PM", value: 132 },
+    { time: "09:00 PM", value: 105 },
+    { time: "12:00 AM", value: 86 },
+  ],
+  circadianRhythm: [
+    { time: "03:00 AM", value: 0.2 },
+    { time: "06:00 AM", value: 0.4 },
+    { time: "09:00 AM", value: 0.8 },
+    { time: "12:00 PM", value: 1.0 },
+    { time: "03:00 PM", value: 0.9 },
+    { time: "06:00 PM", value: 0.7 },
+    { time: "09:00 PM", value: 0.5 },
+    { time: "12:00 AM", value: 0.3 },
+  ],
+  events: [
+    { time: "04:16 AM", type: "sleep", label: "Sleep", duration: "5h 46m" },
+    { time: "07:30 AM", type: "meal", label: "Breakfast", details: "Eggs, avocado toast" },
+    { time: "09:30 AM", type: "workout", label: "HIIT", details: "30 min, 320 cal" },
+    { time: "12:30 PM", type: "meal", label: "Lunch", details: "Chicken salad" },
+    { time: "01:30 PM", type: "supplement", label: "Berberine", details: "500mg" },
+    { time: "03:30 PM", type: "supplement", label: "Fish Oil", details: "1000mg" },
+    { time: "06:30 PM", type: "meal", label: "Dinner", details: "Salmon, vegetables" },
+    { time: "10:00 PM", type: "sleep", label: "Sleep prep", details: "Magnesium, reading" }
+  ]
+};
+
 const Index = () => {
   const [activeTab, setActiveTab] = useState("Summary");
   const [activeDocumentCategory, setActiveDocumentCategory] = useState("All Files");
@@ -261,6 +314,7 @@ const Index = () => {
   const [selectedMetric, setSelectedMetric] = useState<any>(null);
   const [isMetricDrawerOpen, setIsMetricDrawerOpen] = useState(false);
   const [activeMetricFilter, setActiveMetricFilter] = useState<string | null>(null);
+  const [isActivityDrawerOpen, setIsActivityDrawerOpen] = useState(false);
   
   const handleDocumentUpload = () => {
     console.log("Document upload initiated");
@@ -292,6 +346,10 @@ const Index = () => {
     setIsMetricDrawerOpen(true);
   };
 
+  const handleSeeMoreActivities = () => {
+    setIsActivityDrawerOpen(true);
+  };
+
   // Filter metrics based on selected category
   const getFilteredMetrics = () => {
     if (!activeMetricFilter) return [
@@ -317,6 +375,68 @@ const Index = () => {
     ].filter(metric => metric.category === activeMetricFilter);
   };
 
+  // Modified layout for the summary page
+  const renderSummaryPage = () => {
+    return (
+      <>
+        <div className="mt-6">
+          <BiomarkerQuickFilters 
+            outOfRange={3}
+            inRange={22}
+            optimal={5}
+            labResults={mockLabResults}
+          />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <PatientProtocol protocol={mockProtocol} />
+              
+              <div className="space-y-6">
+                <ActivityFeed 
+                  activities={mockActivities.slice(0, 4)} 
+                  showSeeMore 
+                  onSeeMore={handleSeeMoreActivities}
+                />
+                <InsightCards insights={mockInsights} />
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Activity Score</div>
+                  <div className="text-2xl font-bold">{mockScores.activity}</div>
+                  <div className="text-xs text-gray-500">Last 30 days</div>
+                </div>
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Sleep Score</div>
+                  <div className="text-2xl font-bold">{mockScores.sleep}</div>
+                  <div className="text-xs text-gray-500">Last 30 days</div>
+                </div>
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Readiness Score</div>
+                  <div className="text-2xl font-bold">{mockScores.readiness}</div>
+                  <div className="text-xs text-gray-500">Last 30 days</div>
+                </div>
+                <div className="bg-white p-4 rounded-lg border border-gray-200">
+                  <div className="text-xs text-gray-500 mb-1">Biological Age</div>
+                  <div className="text-2xl font-bold">{mockScores.biologicalAge}</div>
+                  <div className="text-xs text-gray-500">3 yrs younger</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ActivityDetailDrawer
+          isOpen={isActivityDrawerOpen}
+          onClose={() => setIsActivityDrawerOpen(false)}
+          activities={mockActivities}
+        />
+      </>
+    );
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
@@ -331,41 +451,7 @@ const Index = () => {
             onChange={setActiveTab}
           />
           
-          {activeTab === "Summary" && <MetricsOverview metrics={mockMetrics} />}
-          
-          {activeTab === "Summary" && (
-            <div className="mt-6">
-              <BiomarkerQuickFilters 
-                outOfRange={3}
-                inRange={22}
-                optimal={5}
-                labResults={mockLabResults}
-              />
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-6">
-                  <PatientProtocol protocol={mockProtocol} />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <ActivityFeed activities={mockActivities} />
-                    <div className="space-y-6">
-                      <InsightCards insights={mockInsights} />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <BiomarkersVisualizer
-                    total={345}
-                    outOfRange={12}
-                    inRange={71}
-                  />
-                  
-                  <ActivityFeed activities={mockActivities.slice(0, 3)} />
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === "Summary" && renderSummaryPage()}
           
           {activeTab === "Metrics" && (
             <div className="mt-6">
@@ -528,6 +614,12 @@ const Index = () => {
                 <h2 className="text-lg font-semibold">Protocol & Schedule</h2>
                 <ProtocolDrawer />
               </div>
+              
+              {calendarView === 'day' && (
+                <div className="mb-4">
+                  <DayViewGraph data={mockDayViewData} />
+                </div>
+              )}
               
               <SchedulePlanner
                 currentDate={currentDate}

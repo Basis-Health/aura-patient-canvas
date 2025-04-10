@@ -2,7 +2,7 @@
 import React from 'react';
 import { 
   FileText, AlertCircle, MessageSquare, ClipboardList, 
-  CalendarClock, ArrowRight, ExternalLink 
+  CalendarClock, ArrowRight, ExternalLink, ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,9 +31,11 @@ export interface ActivityItem {
 
 interface ActivityFeedProps {
   activities: ActivityItem[];
+  showSeeMore?: boolean;
+  onSeeMore?: () => void;
 }
 
-const ActivityFeed = ({ activities }: ActivityFeedProps) => {
+const ActivityFeed = ({ activities, showSeeMore = false, onSeeMore }: ActivityFeedProps) => {
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'document':
@@ -147,6 +149,17 @@ const ActivityFeed = ({ activities }: ActivityFeedProps) => {
               </div>
             </div>
           ))}
+          
+          {showSeeMore && onSeeMore && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full mt-2 text-blue-600 border-blue-200 hover:bg-blue-50"
+              onClick={onSeeMore}
+            >
+              See more activities <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
