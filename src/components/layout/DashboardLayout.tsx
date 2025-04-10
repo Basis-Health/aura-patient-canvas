@@ -3,7 +3,7 @@ import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
   Users, Calendar, LineChart, Beaker, FileText, 
-  LayoutGrid, UserCog, Building, Package2, TruckIcon, Star
+  LayoutGrid, UserCog, Package2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -45,12 +45,6 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
             <UserCog className="h-5 w-5" />
           </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Building className="h-5 w-5" />
-          </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <TruckIcon className="h-5 w-5" />
-          </div>
           <Link to="/services-products">
             <div className={cn(
               "p-2 rounded-md transition-colors",
@@ -59,9 +53,6 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <Package2 className="h-5 w-5" />
             </div>
           </Link>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Star className="h-5 w-5" />
-          </div>
           <Link to="/notes">
             <div className={cn(
               "p-2 rounded-md transition-colors",
