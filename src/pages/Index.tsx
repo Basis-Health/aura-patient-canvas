@@ -27,7 +27,16 @@ const mockMetrics = {
   heartRate: 59
 };
 
-const mockDocuments = [
+interface Document {
+  id: string;
+  name: string;
+  type: "PDF" | "IMAGE" | "SPREADSHEET" | "DOC";
+  category: "labs" | "imaging" | "body" | "other";
+  size: string;
+  date: string;
+}
+
+const mockDocuments: Document[] = [
   { id: "1", name: "Blood Test Results.pdf", type: "PDF", category: "labs", size: "1.18 MB", date: "Dec 22, 2023" },
   { id: "2", name: "MRI Scan.png", type: "IMAGE", category: "imaging", size: "4.35 MB", date: "Nov 15, 2023" },
   { id: "3", name: "Body Composition Analysis.xlsx", type: "SPREADSHEET", category: "body", size: "869.14 KB", date: "Oct 8, 2023" },
@@ -36,7 +45,7 @@ const mockDocuments = [
   { id: "6", name: "Cholesterol Test.pdf", type: "PDF", category: "labs", size: "761.72 KB", date: "Dec 28, 2023" },
   { id: "7", name: "Exercise Program.pdf", type: "PDF", category: "body", size: "1.29 MB", date: "Nov 19, 2023" },
   { id: "8", name: "CT Scan Results.png", type: "IMAGE", category: "imaging", size: "4.96 MB", date: "Aug 23, 2023" },
-] as const;
+];
 
 const mockLabResults = [
   { id: "1", name: "Thyroid Stimulating Hormone (TSH)", value: "3.42 mIU/L", status: "In Range" },
@@ -94,7 +103,7 @@ const Index = () => {
           />
           
           <PatientTabs 
-            tabs={["Summary", "Plan", "Metrics", "Labs"]}
+            tabs={["Summary", "Plan", "Metrics", "Labs", "Documents"]}
             activeTab={activeTab}
             onChange={setActiveTab}
           />
@@ -308,17 +317,25 @@ const Index = () => {
               />
             </div>
           )}
+
+          {activeTab === "Documents" && (
+            <div className="mt-6">
+              <DocumentManager
+                documents={mockDocuments}
+                activeCategory={activeDocumentCategory}
+                onCategoryChange={setActiveDocumentCategory}
+                onUpload={handleDocumentUpload}
+              />
+            </div>
+          )}
         </div>
         
-        {/* Document Management Example */}
-        <div className="mt-8">
-          <DocumentManager
-            documents={mockDocuments}
-            activeCategory={activeDocumentCategory}
-            onCategoryChange={setActiveDocumentCategory}
-            onUpload={handleDocumentUpload}
-          />
-        </div>
+        {/* Remove the document management section from here since it's now a tab */}
+        {activeTab !== "Documents" && (
+          <div className="mt-8">
+            {/* Any other content that should appear below the main section when not on Documents tab */}
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

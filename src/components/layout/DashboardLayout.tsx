@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, Clock, ChevronLeft, 
-  ChevronRight, Users, Calendar, LineChart, BeakerIcon, FileText
+  ChevronRight, Users, Calendar, LineChart, Beaker, FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           <Users className="h-5 w-5 text-gray-500" />
           <Calendar className="h-5 w-5 text-gray-500" />
           <LineChart className="h-5 w-5 text-primary" />
-          <BeakerIcon className="h-5 w-5 text-gray-500" />
+          <Beaker className="h-5 w-5 text-gray-500" />
           <FileText className="h-5 w-5 text-gray-500" />
         </div>
         <div className="mt-auto">

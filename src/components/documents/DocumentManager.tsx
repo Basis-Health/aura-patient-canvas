@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Filter, Plus, File, FileText, FileImage, Table, MoreVertical, Eye, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -85,7 +84,7 @@ const DocumentManager = ({
           <Button variant="outline" className="flex items-center gap-2">
             <Filter className="h-4 w-4" /> Filter
           </Button>
-          <Button className="flex items-center gap-2">
+          <Button className="flex items-center gap-2" onClick={onUpload}>
             <Plus className="h-4 w-4" /> Upload
           </Button>
         </div>
@@ -156,7 +155,6 @@ const DocumentManager = ({
         ))}
       </div>
       
-      {/* Alternative table view */}
       <div className="mt-8 hidden">
         <table className="w-full text-left">
           <thead className="bg-gray-50 text-gray-600 text-xs uppercase">
