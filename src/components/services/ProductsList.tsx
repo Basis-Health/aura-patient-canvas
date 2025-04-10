@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
 import { 
-  Plus, Edit, Trash2, DollarSign, 
-  EyeOff, Eye, Check, X, Loader2 
+  Plus, Edit, Trash2, DollarSign, EyeOff, Eye, 
+  Check, X, Loader2, ExternalLink 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,14 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -33,6 +25,14 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 type Product = {
   id: string;
@@ -41,6 +41,7 @@ type Product = {
   description: string;
   visibleToClients: boolean;
   stripeProductId: string | null;
+  stripePaymentLink: string | null;
   inStock: boolean;
 };
 
@@ -52,6 +53,7 @@ const mockProducts: Product[] = [
     description: "30-day supply of essential supplements",
     visibleToClients: true,
     stripeProductId: "prod_abc123",
+    stripePaymentLink: "https://buy.stripe.com/test_abc123",
     inStock: true,
   },
   {
@@ -61,6 +63,7 @@ const mockProducts: Product[] = [
     description: "Complete home fitness equipment kit",
     visibleToClients: true,
     stripeProductId: null,
+    stripePaymentLink: null,
     inStock: true,
   },
   {
@@ -70,6 +73,7 @@ const mockProducts: Product[] = [
     description: "90-day wellness tracking journal",
     visibleToClients: false,
     stripeProductId: null,
+    stripePaymentLink: null,
     inStock: false,
   },
 ];
@@ -79,6 +83,13 @@ const mockStripeProducts = [
   { id: "prod_abc123", name: "Supplement Pack", price: 45 },
   { id: "prod_def456", name: "Premium Supplement", price: 65 },
   { id: "prod_ghi789", name: "Gift Card", price: 50 },
+];
+
+// Mock Stripe payment links
+const mockStripePaymentLinks = [
+  { id: "plink_123", url: "https://buy.stripe.com/test_abc123", name: "Supplement Pack Link" },
+  { id: "plink_456", url: "https://buy.stripe.com/test_def456", name: "Premium Supplement Link" },
+  { id: "plink_789", url: "https://buy.stripe.com/test_ghi789", name: "Gift Card Link" },
 ];
 
 const ProductsList = () => {
@@ -91,6 +102,7 @@ const ProductsList = () => {
     description: "",
     visibleToClients: true,
     stripeProductId: null,
+    stripePaymentLink: null,
     inStock: true,
   });
   const [isStripeSync, setIsStripeSync] = useState(false);
@@ -108,6 +120,7 @@ const ProductsList = () => {
         description: newProduct.description || "",
         visibleToClients: newProduct.visibleToClients !== false,
         stripeProductId: isStripeSync ? (newProduct.stripeProductId || null) : null,
+        stripePaymentLink: isStripeSync ? (newProduct.stripePaymentLink || null) : null,
         inStock: newProduct.inStock !== false,
       };
       
@@ -118,6 +131,7 @@ const ProductsList = () => {
         description: "",
         visibleToClients: true,
         stripeProductId: null,
+        stripePaymentLink: null,
         inStock: true,
       });
       setIsCreatingProduct(false);
@@ -143,6 +157,7 @@ const ProductsList = () => {
               description: newProduct.description || product.description,
               visibleToClients: newProduct.visibleToClients !== undefined ? newProduct.visibleToClients : product.visibleToClients,
               stripeProductId: isStripeSync ? (newProduct.stripeProductId || product.stripeProductId) : null,
+              stripePaymentLink: isStripeSync ? (newProduct.stripePaymentLink || product.stripePaymentLink) : null,
               inStock: newProduct.inStock !== undefined ? newProduct.inStock : product.inStock,
             }
           : product
@@ -156,6 +171,7 @@ const ProductsList = () => {
         description: "",
         visibleToClients: true,
         stripeProductId: null,
+        stripePaymentLink: null,
         inStock: true,
       });
       setIsLoading(false);
@@ -178,12 +194,13 @@ const ProductsList = () => {
       description: product.description,
       visibleToClients: product.visibleToClients,
       stripeProductId: product.stripeProductId,
+      stripePaymentLink: product.stripePaymentLink,
       inStock: product.inStock,
     });
-    setIsStripeSync(!!product.stripeProductId);
+    setIsStripeSync(!!product.stripeProductId || !!product.stripePaymentLink);
   };
 
-  const closeDialog = () => {
+  const closeDrawer = () => {
     setIsCreatingProduct(false);
     setIsEditingProduct(null);
     setNewProduct({
@@ -192,6 +209,7 @@ const ProductsList = () => {
       description: "",
       visibleToClients: true,
       stripeProductId: null,
+      stripePaymentLink: null,
       inStock: true,
     });
     setIsStripeSync(false);
@@ -262,6 +280,16 @@ const ProductsList = () => {
                   {product.stripeProductId ? (
                     <span className="flex items-center text-green-600">
                       <Check className="h-4 w-4 mr-1" /> Synced
+                      {product.stripePaymentLink && (
+                        <a 
+                          href={product.stripePaymentLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="ml-2 text-blue-500 hover:text-blue-700 inline-flex items-center"
+                        >
+                          <ExternalLink className="h-3 w-3 mr-1" /> Link
+                        </a>
+                      )}
                     </span>
                   ) : (
                     <span className="flex items-center text-gray-500">
@@ -293,24 +321,24 @@ const ProductsList = () => {
         </TableBody>
       </Table>
 
-      {/* Create/Edit Product Dialog */}
-      <Dialog
+      {/* Create/Edit Product Drawer */}
+      <Sheet 
         open={isCreatingProduct || !!isEditingProduct}
         onOpenChange={(open) => {
-          if (!open) closeDialog();
+          if (!open) closeDrawer();
         }}
       >
-        <DialogContent className="sm:max-w-[525px]">
-          <DialogHeader>
-            <DialogTitle>
+        <SheetContent side="right" className="sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>
               {isEditingProduct ? "Edit Product" : "Create New Product"}
-            </DialogTitle>
-            <DialogDescription>
+            </SheetTitle>
+            <SheetDescription>
               {isEditingProduct
                 ? "Update the details of your existing product."
                 : "Add a new product to your clinic catalog."}
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
@@ -413,33 +441,59 @@ const ProductsList = () => {
             </div>
 
             {isStripeSync && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="stripeProduct" className="text-right">
-                  Stripe Product
-                </Label>
-                <Select
-                  value={newProduct.stripeProductId || ""}
-                  onValueChange={(value) =>
-                    setNewProduct({ ...newProduct, stripeProductId: value })
-                  }
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a product" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Create new product</SelectItem>
-                    {mockStripeProducts.map((product) => (
-                      <SelectItem key={product.id} value={product.id}>
-                        {product.name} - ${product.price}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="stripeProduct" className="text-right">
+                    Stripe Product
+                  </Label>
+                  <Select
+                    value={newProduct.stripeProductId || ""}
+                    onValueChange={(value) =>
+                      setNewProduct({ ...newProduct, stripeProductId: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Create new product</SelectItem>
+                      {mockStripeProducts.map((product) => (
+                        <SelectItem key={product.id} value={product.id}>
+                          {product.name} - ${product.price}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="stripePaymentLink" className="text-right">
+                    Payment Link
+                  </Label>
+                  <Select
+                    value={newProduct.stripePaymentLink || ""}
+                    onValueChange={(value) =>
+                      setNewProduct({ ...newProduct, stripePaymentLink: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a payment link" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">No payment link</SelectItem>
+                      {mockStripePaymentLinks.map((link) => (
+                        <SelectItem key={link.id} value={link.url}>
+                          {link.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
             )}
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeDialog}>
+          <SheetFooter>
+            <Button variant="outline" onClick={closeDrawer}>
               Cancel
             </Button>
             <Button 
@@ -449,9 +503,9 @@ const ProductsList = () => {
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditingProduct ? "Update Product" : "Create Product"}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

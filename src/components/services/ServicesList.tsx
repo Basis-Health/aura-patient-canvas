@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { 
   Plus, Edit, Trash2, DollarSign, EyeOff, Eye, 
-  RepeatIcon, Check, X, Loader2, ArrowUpDown
+  RepeatIcon, Check, X, Loader2, ArrowUpDown, ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,14 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -32,6 +24,15 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 
 type Service = {
   id: string;
@@ -40,6 +41,7 @@ type Service = {
   isRecurring: boolean;
   visibleToClients: boolean;
   stripeProductId: string | null;
+  stripePaymentLink: string | null;
 };
 
 const mockServices: Service[] = [
@@ -50,6 +52,7 @@ const mockServices: Service[] = [
     isRecurring: false,
     visibleToClients: true,
     stripeProductId: "prod_123456",
+    stripePaymentLink: "https://buy.stripe.com/test_123abc",
   },
   {
     id: "2",
@@ -58,6 +61,7 @@ const mockServices: Service[] = [
     isRecurring: false,
     visibleToClients: true,
     stripeProductId: null,
+    stripePaymentLink: null,
   },
   {
     id: "3",
@@ -66,6 +70,7 @@ const mockServices: Service[] = [
     isRecurring: true,
     visibleToClients: true,
     stripeProductId: "prod_789012",
+    stripePaymentLink: "https://buy.stripe.com/test_456def",
   },
 ];
 
@@ -74,6 +79,13 @@ const mockStripeProducts = [
   { id: "prod_123456", name: "Initial Consultation", price: 150 },
   { id: "prod_789012", name: "Monthly Coaching", price: 200 },
   { id: "prod_345678", name: "Premium Plan", price: 300 },
+];
+
+// Mock Stripe payment links
+const mockStripePaymentLinks = [
+  { id: "plink_123", url: "https://buy.stripe.com/test_123abc", name: "Initial Consultation Link" },
+  { id: "plink_456", url: "https://buy.stripe.com/test_456def", name: "Monthly Coaching Link" },
+  { id: "plink_789", url: "https://buy.stripe.com/test_789ghi", name: "Premium Plan Link" },
 ];
 
 const ServicesList = () => {
@@ -86,6 +98,7 @@ const ServicesList = () => {
     isRecurring: false,
     visibleToClients: true,
     stripeProductId: null,
+    stripePaymentLink: null,
   });
   const [isStripeSync, setIsStripeSync] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,6 +115,7 @@ const ServicesList = () => {
         isRecurring: newService.isRecurring || false,
         visibleToClients: newService.visibleToClients !== false,
         stripeProductId: isStripeSync ? (newService.stripeProductId || null) : null,
+        stripePaymentLink: isStripeSync ? (newService.stripePaymentLink || null) : null,
       };
       
       setServices([...services, serviceToAdd]);
@@ -111,6 +125,7 @@ const ServicesList = () => {
         isRecurring: false,
         visibleToClients: true,
         stripeProductId: null,
+        stripePaymentLink: null,
       });
       setIsCreatingService(false);
       setIsLoading(false);
@@ -135,6 +150,7 @@ const ServicesList = () => {
               isRecurring: newService.isRecurring !== undefined ? newService.isRecurring : service.isRecurring,
               visibleToClients: newService.visibleToClients !== undefined ? newService.visibleToClients : service.visibleToClients,
               stripeProductId: isStripeSync ? (newService.stripeProductId || service.stripeProductId) : null,
+              stripePaymentLink: isStripeSync ? (newService.stripePaymentLink || service.stripePaymentLink) : null,
             }
           : service
       );
@@ -147,6 +163,7 @@ const ServicesList = () => {
         isRecurring: false,
         visibleToClients: true,
         stripeProductId: null,
+        stripePaymentLink: null,
       });
       setIsLoading(false);
       
@@ -168,11 +185,12 @@ const ServicesList = () => {
       isRecurring: service.isRecurring,
       visibleToClients: service.visibleToClients,
       stripeProductId: service.stripeProductId,
+      stripePaymentLink: service.stripePaymentLink,
     });
-    setIsStripeSync(!!service.stripeProductId);
+    setIsStripeSync(!!service.stripeProductId || !!service.stripePaymentLink);
   };
 
-  const closeDialog = () => {
+  const closeDrawer = () => {
     setIsCreatingService(false);
     setIsEditingService(null);
     setNewService({
@@ -181,6 +199,7 @@ const ServicesList = () => {
       isRecurring: false,
       visibleToClients: true,
       stripeProductId: null,
+      stripePaymentLink: null,
     });
     setIsStripeSync(false);
   };
@@ -241,6 +260,16 @@ const ServicesList = () => {
                   {service.stripeProductId ? (
                     <span className="flex items-center text-green-600">
                       <Check className="h-4 w-4 mr-1" /> Synced
+                      {service.stripePaymentLink && (
+                        <a 
+                          href={service.stripePaymentLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="ml-2 text-blue-500 hover:text-blue-700 inline-flex items-center"
+                        >
+                          <ExternalLink className="h-3 w-3 mr-1" /> Link
+                        </a>
+                      )}
                     </span>
                   ) : (
                     <span className="flex items-center text-gray-500">
@@ -272,24 +301,24 @@ const ServicesList = () => {
         </TableBody>
       </Table>
 
-      {/* Create/Edit Service Dialog */}
-      <Dialog
-        open={isCreatingService || !!isEditingService}
+      {/* Create/Edit Service Drawer */}
+      <Sheet 
+        open={isCreatingService || !!isEditingService} 
         onOpenChange={(open) => {
-          if (!open) closeDialog();
+          if (!open) closeDrawer();
         }}
       >
-        <DialogContent className="sm:max-w-[525px]">
-          <DialogHeader>
-            <DialogTitle>
+        <SheetContent side="right" className="sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>
               {isEditingService ? "Edit Service" : "Create New Service"}
-            </DialogTitle>
-            <DialogDescription>
+            </SheetTitle>
+            <SheetDescription>
               {isEditingService
                 ? "Update the details of your existing service."
                 : "Add a new service to your clinic offerings."}
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
@@ -377,33 +406,59 @@ const ServicesList = () => {
             </div>
 
             {isStripeSync && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="stripeProduct" className="text-right">
-                  Stripe Product
-                </Label>
-                <Select
-                  value={newService.stripeProductId || ""}
-                  onValueChange={(value) =>
-                    setNewService({ ...newService, stripeProductId: value })
-                  }
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a product" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Create new product</SelectItem>
-                    {mockStripeProducts.map((product) => (
-                      <SelectItem key={product.id} value={product.id}>
-                        {product.name} - ${product.price}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="stripeProduct" className="text-right">
+                    Stripe Product
+                  </Label>
+                  <Select
+                    value={newService.stripeProductId || ""}
+                    onValueChange={(value) =>
+                      setNewService({ ...newService, stripeProductId: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Create new product</SelectItem>
+                      {mockStripeProducts.map((product) => (
+                        <SelectItem key={product.id} value={product.id}>
+                          {product.name} - ${product.price}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="stripePaymentLink" className="text-right">
+                    Payment Link
+                  </Label>
+                  <Select
+                    value={newService.stripePaymentLink || ""}
+                    onValueChange={(value) =>
+                      setNewService({ ...newService, stripePaymentLink: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a payment link" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">No payment link</SelectItem>
+                      {mockStripePaymentLinks.map((link) => (
+                        <SelectItem key={link.id} value={link.url}>
+                          {link.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
             )}
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeDialog}>
+          <SheetFooter>
+            <Button variant="outline" onClick={closeDrawer}>
               Cancel
             </Button>
             <Button 
@@ -413,9 +468,9 @@ const ServicesList = () => {
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditingService ? "Update Service" : "Create Service"}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
