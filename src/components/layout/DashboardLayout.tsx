@@ -23,20 +23,20 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
       <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 space-y-8">
         <div className="flex flex-col items-center space-y-8">
           <ChevronLeft className="h-5 w-5 text-gray-500" />
-          <Link to="/clients">
-            <div className={cn(
-              "p-2 rounded-md transition-colors",
-              location.pathname === "/clients" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
-            )}>
-              <Users className="h-5 w-5" />
-            </div>
-          </Link>
           <Link to="/">
             <div className={cn(
               "p-2 rounded-md transition-colors",
               location.pathname === "/" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
               <LayoutGrid className="h-5 w-5" />
+            </div>
+          </Link>
+          <Link to="/clients">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/clients" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <Users className="h-5 w-5" />
             </div>
           </Link>
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
