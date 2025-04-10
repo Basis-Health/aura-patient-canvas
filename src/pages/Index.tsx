@@ -36,7 +36,8 @@ const mockPatient = {
   avatarUrl: "/lovable-uploads/1ca07b90-534f-4849-83c5-906dee56f04c.png"
 };
 
-const mockMetrics = {
+// Renamed from mockMetrics to mockMetricsSummary to avoid conflict
+const mockMetricsSummary = {
   steps: 1503,
   weight: 189,
   heartRate: 59
