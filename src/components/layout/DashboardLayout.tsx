@@ -2,7 +2,8 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, Clock, ChevronLeft, 
-  ChevronRight, Users, Calendar, LineChart, Beaker, FileText
+  ChevronRight, Users, Calendar, LineChart, Beaker, FileText,
+  Bot, MessageCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -14,7 +15,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex relative">
       {/* Sidebar */}
       <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 space-y-8">
         <div className="flex flex-col items-center space-y-8">
@@ -71,6 +72,19 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           {title && <h1 className="text-2xl font-bold mb-6">{title}</h1>}
           {children}
         </main>
+      </div>
+
+      {/* Sticky Chat Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-4">
+        {/* Copilot Chat Button */}
+        <button className="bg-primary hover:bg-primary/90 text-white p-3 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105">
+          <Bot className="h-6 w-6" />
+        </button>
+        
+        {/* Client Chat Button */}
+        <button className="bg-white hover:bg-gray-100 text-primary border border-gray-200 p-3 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105">
+          <MessageCircle className="h-6 w-6" />
+        </button>
       </div>
     </div>
   );
