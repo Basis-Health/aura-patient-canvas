@@ -413,6 +413,7 @@ const Index = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <PatientHeader 
             patient={mockPatient}
+            activeTab={activeTab}
           />
           
           <PatientTabs 
