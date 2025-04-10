@@ -1,8 +1,8 @@
+
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
-  Users, Calendar, FileText, 
-  LayoutGrid, Package2
+  Users, Calendar, LayoutDashboard, Package2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -29,7 +29,7 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               "p-2 rounded-md transition-colors",
               location.pathname === "/" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
-              <LayoutGrid className="h-5 w-5" />
+              <LayoutDashboard className="h-5 w-5" />
             </div>
           </Link>
           
@@ -60,16 +60,6 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               location.pathname === "/services-products" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
               <Package2 className="h-5 w-5" />
-            </div>
-          </Link>
-          
-          {/* Notes (keeping this as it seems to be an important section) */}
-          <Link to="/notes">
-            <div className={cn(
-              "p-2 rounded-md transition-colors",
-              location.pathname === "/notes" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
-            )}>
-              <FileText className="h-5 w-5" />
             </div>
           </Link>
         </div>
