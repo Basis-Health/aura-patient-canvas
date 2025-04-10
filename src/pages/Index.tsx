@@ -216,6 +216,48 @@ const mockMetrics = {
   heartRate: 68
 };
 
+// Mock insights data for InsightCards component
+const mockInsights = [
+  {
+    id: "1",
+    title: "Improved Sleep Quality",
+    description: "Sleep efficiency up 15% this month",
+    trend: "up" as const,
+    percentage: 15,
+    timeframe: "Past 30 days",
+    chartData: [
+      { date: "Apr 1", value: 72 },
+      { date: "Apr 8", value: 78 },
+      { date: "Apr 15", value: 83 },
+      { date: "Apr 22", value: 87 },
+      { date: "Apr 29", value: 85 },
+    ],
+    type: "metric" as const
+  },
+  {
+    id: "2",
+    title: "Reduced Inflammation",
+    description: "CRP levels down 22%",
+    trend: "down" as const,
+    percentage: 22,
+    timeframe: "Past 90 days",
+    chartData: [
+      { date: "Jan", value: 3.2 },
+      { date: "Feb", value: 2.8 },
+      { date: "Mar", value: 2.5 },
+      { date: "Apr", value: 2.1 },
+    ],
+    type: "biomarker" as const
+  },
+];
+
+// Mock biomarker data for the BiomarkersVisualizer
+const mockBiomarkerStats = {
+  total: 345,
+  outOfRange: 24,
+  inRange: 321
+};
+
 // Define the Index component
 const Index = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -243,7 +285,6 @@ const Index = () => {
     <DashboardLayout>
       <PatientHeader 
         patient={mockPatient}
-        lastVisit="Mar 15, 2025"
       />
       
       <div className="container py-6">
@@ -261,22 +302,23 @@ const Index = () => {
             <MetricsOverview metrics={mockMetrics} />
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Moved Activity Feed up to left column */}
+              {/* Activity Feed up in left column */}
               <div className="space-y-6">
                 <ActivityFeed 
-                  title="Recent Activity"
-                  subtitle={`Last updated: ${format(new Date(), 'MMM d, yyyy')}`}
-                  items={mockActivityItems}
-                  limit={4}
-                  showViewAll={true}
+                  activities={mockActivityItems}
+                  showSeeMore={true}
                 />
                 
                 {/* Insights moved below Activity Feed */}
-                <InsightCards />
+                <InsightCards insights={mockInsights} />
               </div>
               
               <div className="md:col-span-2">
-                <BiomarkersVisualizer />
+                <BiomarkersVisualizer 
+                  total={mockBiomarkerStats.total}
+                  outOfRange={mockBiomarkerStats.outOfRange}
+                  inRange={mockBiomarkerStats.inRange}
+                />
               </div>
             </div>
           </TabsContent>
@@ -344,4 +386,3 @@ const Index = () => {
 
 // Add default export
 export default Index;
-
