@@ -51,9 +51,14 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
             <TruckIcon className="h-5 w-5" />
           </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Package2 className="h-5 w-5" />
-          </div>
+          <Link to="/services-products">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/services-products" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <Package2 className="h-5 w-5" />
+            </div>
+          </Link>
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
             <Star className="h-5 w-5" />
           </div>
