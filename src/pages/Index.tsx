@@ -23,10 +23,9 @@ import EventDetailDrawer from '@/components/planner/EventDetailDrawer';
 import MetricDetailDrawer from '@/components/metrics/MetricDetailDrawer';
 import DayViewGraph from '@/components/planner/DayViewGraph';
 import ActivityDetailDrawer from '@/components/activity/ActivityDetailDrawer';
-import { NotesList } from '@/components/notes/NotesList';
-import { NoteEditor } from '@/components/notes/NoteEditor';
 import { Note, NoteStatus } from '@/types/notes';
 import { PlusCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const mockPatient = {
   name: "George Georgallides",
@@ -338,6 +337,21 @@ const mockNotes: Note[] = [
   }
 ];
 
+const mockMetrics = [
+  { id: "1", name: "Heart Rate", value: 62, unit: "bpm", category: "cardiovascular" },
+  { id: "2", name: "Blood Pressure", value: "120/80", category: "cardiovascular" },
+  { id: "3", name: "Steps", value: "8,547", category: "activity" },
+  { id: "4", name: "Resting HR", value: 58, unit: "bpm", category: "cardiovascular" },
+  { id: "5", name: "Sleep Duration", value: "7h 22m", category: "sleep" },
+  { id: "6", name: "Deep Sleep", value: "1h 12m", category: "sleep" },
+  { id: "7", name: "Glucose", value: 89, unit: "mg/dL", category: "metabolic" },
+  { id: "8", name: "HRV", value: 64, unit: "ms", category: "cardiovascular" },
+  { id: "9", name: "Stress Score", value: 28, category: "activity" },
+  { id: "10", name: "Active Calories", value: 420, unit: "kcal", category: "activity" },
+  { id: "11", name: "Weight", value: 187.5, unit: "lbs", category: "metabolic" },
+  { id: "12", name: "Body Fat", value: "18.2%", category: "metabolic" },
+];
+
 const Index = () => {
   const [activeTab, setActiveTab] = useState("Summary");
   const [activeDocumentCategory, setActiveDocumentCategory] = useState("All Files");
@@ -412,6 +426,11 @@ const Index = () => {
     }
     setSelectedNote(null);
     setIsCreatingNew(false);
+  };
+
+  const getFilteredMetrics = () => {
+    if (!activeMetricFilter) return mockMetrics;
+    return mockMetrics.filter(metric => metric.category === activeMetricFilter);
   };
 
   const renderSummaryPage = () => {
@@ -666,42 +685,10 @@ const Index = () => {
           )}
           
           {activeTab === "Notes" && (
-            <div className="mt-6 flex flex-col md:flex-row gap-6">
-              <div className="md:w-1/3 lg:w-1/4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Patient Notes</h2>
-                  <Button onClick={handleNewNote} size="sm" className="flex items-center gap-1">
-                    <PlusCircle className="h-4 w-4" />
-                    New Note
-                  </Button>
-                </div>
-                <NotesList 
-                  notes={notes} 
-                  onSelectNote={handleNoteSelect} 
-                  selectedNoteId={selectedNote?.id}
-                />
-              </div>
-              
-              <div className="md:w-2/3 lg:w-3/4">
-                {isCreatingNew || selectedNote ? (
-                  <NoteEditor 
-                    note={selectedNote} 
-                    onSave={handleSaveNote} 
-                    isNew={isCreatingNew}
-                  />
-                ) : (
-                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-8 h-full flex items-center justify-center">
-                    <div className="text-center">
-                      <h3 className="text-lg font-medium text-gray-700 mb-2">Select a note or create a new one</h3>
-                      <p className="text-gray-500 mb-4">Click on a note from the list to view or edit it</p>
-                      <Button onClick={handleNewNote} className="flex items-center gap-1 mx-auto">
-                        <PlusCircle className="h-4 w-4" />
-                        Create New Note
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </div>
+            <div className="mt-6">
+              <Link to="/notes" className="bg-primary text-white px-4 py-2 rounded">
+                View All Notes
+              </Link>
             </div>
           )}
         </div>
