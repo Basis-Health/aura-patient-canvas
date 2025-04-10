@@ -2,8 +2,8 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
-  Users, Calendar, LineChart, Beaker, FileText, 
-  LayoutGrid, UserCog, Building, Package2, TruckIcon, Star
+  Users, Calendar, FileText, LayoutGrid, CreditCard,
+  PackageIcon, Building, User, DollarSign, UserCog
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -43,19 +43,10 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
             <Calendar className="h-5 w-5" />
           </div>
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <UserCog className="h-5 w-5" />
-          </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
             <Building className="h-5 w-5" />
           </div>
           <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <TruckIcon className="h-5 w-5" />
-          </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Package2 className="h-5 w-5" />
-          </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Star className="h-5 w-5" />
+            <PackageIcon className="h-5 w-5" />
           </div>
           <Link to="/notes">
             <div className={cn(
@@ -63,6 +54,22 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               location.pathname === "/notes" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
               <FileText className="h-5 w-5" />
+            </div>
+          </Link>
+          <Link to="/preferences">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname.startsWith("/preferences") ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <UserCog className="h-5 w-5" />
+            </div>
+          </Link>
+          <Link to="/billing">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname.startsWith("/billing") ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <DollarSign className="h-5 w-5" />
             </div>
           </Link>
         </div>
@@ -95,7 +102,11 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
               <MessageSquare className="h-5 w-5 text-gray-500" />
             </div>
-            <Settings className="h-5 w-5 text-gray-500" />
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                <User className="h-4 w-4 text-gray-500" />
+              </div>
+            </div>
           </div>
         </header>
 
