@@ -177,7 +177,7 @@ const mockProtocol: Protocol = {
 const mockActivityItems = [
   {
     id: "1",
-    type: "lab_result",
+    type: "lab_result" as const,
     title: "New Lab Results",
     description: "HbA1c improved from 5.7% to 5.4%",
     date: "2 hours ago",
@@ -185,7 +185,7 @@ const mockActivityItems = [
   },
   {
     id: "2",
-    type: "protocol_change",
+    type: "protocol_change" as const,
     title: "Protocol Updated",
     description: "Added NAC 600mg supplement to protocol",
     date: "Yesterday",
@@ -193,7 +193,7 @@ const mockActivityItems = [
   },
   {
     id: "3",
-    type: "message",
+    type: "message" as const,
     title: "Message from Client",
     description: "Question about berberine timing",
     date: "2 days ago",
@@ -201,7 +201,7 @@ const mockActivityItems = [
   },
   {
     id: "4",
-    type: "appointment",
+    type: "appointment" as const,
     title: "Appointment Scheduled",
     description: "Follow-up: May 15, 10:00 AM",
     date: "3 days ago",
