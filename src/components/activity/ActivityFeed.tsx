@@ -20,13 +20,12 @@ import LabResultItem from '../labs/LabResultItem';
 
 export interface ActivityItem {
   id: string;
-  type: 'document' | 'biomarker' | 'note' | 'appointment' | 'protocol' | 'lab_result' | 'protocol_change' | 'message';
+  type: 'document' | 'biomarker' | 'note' | 'appointment' | 'protocol';
   title: string;
   description: string;
   date: string;
   status?: string;
   link?: string;
-  icon?: string;
   details?: any;
 }
 
