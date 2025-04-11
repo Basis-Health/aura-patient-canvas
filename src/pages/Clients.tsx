@@ -114,7 +114,7 @@ const Clients = () => {
   );
 
   const handleViewClient = (clientId: string) => {
-    navigate(`/patient/${clientId}`); // Navigate to the patient profile page with ID
+    navigate('/'); // Navigate to the patient profile page
   };
 
   return (
