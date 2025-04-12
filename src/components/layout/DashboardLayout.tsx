@@ -2,8 +2,7 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
-  Users, Calendar, LineChart, Beaker, FileText, 
-  LayoutGrid, UserCog, Package2
+  Users, Calendar, LayoutDashboard, Package2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -23,6 +22,18 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
       <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-6 space-y-8">
         <div className="flex flex-col items-center space-y-8">
           <ChevronLeft className="h-5 w-5 text-gray-500" />
+          
+          {/* Dashboard */}
+          <Link to="/">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <LayoutDashboard className="h-5 w-5" />
+            </div>
+          </Link>
+          
+          {/* Client Directory */}
           <Link to="/clients">
             <div className={cn(
               "p-2 rounded-md transition-colors",
@@ -31,20 +42,18 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <Users className="h-5 w-5" />
             </div>
           </Link>
-          <Link to="/">
+          
+          {/* Calendar */}
+          <Link to="/calendar">
             <div className={cn(
               "p-2 rounded-md transition-colors",
-              location.pathname === "/" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+              location.pathname === "/calendar" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
-              <LayoutGrid className="h-5 w-5" />
+              <Calendar className="h-5 w-5" />
             </div>
           </Link>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <Calendar className="h-5 w-5" />
-          </div>
-          <div className="p-2 rounded-md text-gray-500 hover:text-primary transition-colors">
-            <UserCog className="h-5 w-5" />
-          </div>
+          
+          {/* Products/Services */}
           <Link to="/services-products">
             <div className={cn(
               "p-2 rounded-md transition-colors",
@@ -53,17 +62,18 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               <Package2 className="h-5 w-5" />
             </div>
           </Link>
-          <Link to="/notes">
+        </div>
+        
+        {/* Settings at the bottom */}
+        <div className="mt-auto">
+          <Link to="/settings">
             <div className={cn(
               "p-2 rounded-md transition-colors",
-              location.pathname === "/notes" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+              location.pathname === "/settings" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
-              <FileText className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
             </div>
           </Link>
-        </div>
-        <div className="mt-auto">
-          <Settings className="h-5 w-5 text-gray-500" />
         </div>
       </div>
 
