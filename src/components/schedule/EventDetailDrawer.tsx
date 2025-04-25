@@ -40,6 +40,24 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
     // Would implement copy link functionality
   };
 
+  // Function to get color based on event type or owner
+  const getEventColor = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'work':
+        return { bg: "bg-red-500", text: "bg-red-100 text-red-800 border-red-200" };
+      case 'meeting':
+        return { bg: "bg-blue-500", text: "bg-blue-100 text-blue-800 border-blue-200" };
+      case 'appointment':
+        return { bg: "bg-amber-500", text: "bg-amber-100 text-amber-800 border-amber-200" };
+      case 'busy':
+        return { bg: "bg-amber-500", text: "bg-amber-100 text-amber-800 border-amber-200" };
+      default:
+        return { bg: "bg-gray-500", text: "bg-gray-100 text-gray-800 border-gray-200" };
+    }
+  };
+
+  const colorClass = getEventColor(event.type);
+
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="max-h-screen overflow-y-auto w-[400px] sm:w-[450px]">
@@ -48,10 +66,7 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
             <div 
               className={cn(
                 "w-4 h-4 rounded-full mr-3",
-                event.type === 'work' && "bg-red-500",
-                event.type === 'meeting' && "bg-blue-500",
-                event.type === 'appointment' && "bg-amber-500",
-                event.type === 'busy' && "bg-yellow-500"
+                colorClass.bg
               )} 
             />
             <SheetTitle className="text-lg font-bold">{event.title}</SheetTitle>

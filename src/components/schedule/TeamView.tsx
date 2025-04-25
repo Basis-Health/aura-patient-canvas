@@ -20,29 +20,32 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     return `${hour} ${amPm}`;
   });
   
-  // Mocked team members for demonstration
+  // Team members with distinct calendar colors
   const teamMembers = [
-    { id: '1', name: 'George', email: 'george@basishealth.io', avatarUrl: '' },
-    { id: '2', name: 'Sarah', email: 'sarah@basishealth.io', avatarUrl: '' }
+    { 
+      id: '1', 
+      name: 'George', 
+      email: 'george@basishealth.io', 
+      avatarUrl: '', 
+      color: 'bg-amber-100 text-amber-800 border-amber-200' 
+    },
+    { 
+      id: '2', 
+      name: 'Sarah', 
+      email: 'sarah@basishealth.io', 
+      avatarUrl: '', 
+      color: 'bg-blue-100 text-blue-800 border-blue-200' 
+    },
+    { 
+      id: '3', 
+      name: 'Michael', 
+      email: 'michael@basishealth.io', 
+      avatarUrl: '', 
+      color: 'bg-purple-100 text-purple-800 border-purple-200' 
+    }
   ];
   
-  const getEventColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'work':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'meeting':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'appointment':
-        return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'busy':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'free':
-        return 'bg-green-100 text-green-800 border-green-200';
-      default:
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'; // Default to busy
-    }
-  };
-
+  // Function to get the position of an event in the calendar grid
   const getEventPosition = (event: Event) => {
     // Extract hour from event time (e.g., "11:30 AM" -> 11)
     const startTimeParts = event.start.split(':');
@@ -72,6 +75,57 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     };
   };
   
+  // Sample events distributed across team members
+  const getMemberEvents = (memberId: string) => {
+    // In a real app, we would filter events by member ID
+    // For demo, we'll return different sets based on member ID
+    switch (memberId) {
+      case '1':
+        return [
+          { 
+            id: 'event1', 
+            title: 'Busy', 
+            start: '11:30 AM', 
+            end: '12:30 PM', 
+            type: 'busy', 
+            date: new Date() 
+          },
+          { 
+            id: 'event2', 
+            title: 'Busy', 
+            start: '5:00 PM', 
+            end: '6:00 PM', 
+            type: 'busy', 
+            date: new Date() 
+          }
+        ];
+      case '2':
+        return [
+          { 
+            id: 'event3', 
+            title: 'Busy', 
+            start: '2:00 PM', 
+            end: '3:30 PM', 
+            type: 'busy', 
+            date: new Date() 
+          }
+        ];
+      case '3':
+        return [
+          { 
+            id: 'event4', 
+            title: 'Busy', 
+            start: '7:00 PM', 
+            end: '8:00 PM', 
+            type: 'busy', 
+            date: new Date() 
+          }
+        ];
+      default:
+        return [];
+    }
+  };
+  
   // For day view in team mode
   if (view === 'day') {
     return (
@@ -87,7 +141,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                   <AvatarImage src={member.avatarUrl} alt={member.name} />
                   <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <div className="text-xs truncate">{member.name}</div>
+                <div className="text-xs font-medium truncate">{member.name}</div>
                 <div className="text-xs text-gray-500 truncate">{member.email}</div>
               </div>
             ))}
@@ -108,7 +162,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             </div>
             
             {/* Team member columns */}
-            {teamMembers.map((member, memberIndex) => (
+            {teamMembers.map((member) => (
               <div 
                 key={member.id}
                 className="flex-1 relative border-r border-gray-200 last:border-r-0"
@@ -122,17 +176,17 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                 ))}
                 
                 {/* Events for this team member */}
-                {events.map((event, eventIndex) => (
+                {getMemberEvents(member.id).map((event, eventIndex) => (
                   <div
-                    key={`${memberIndex}-${eventIndex}`}
+                    key={eventIndex}
                     className={cn(
                       "absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
-                      getEventColor('busy') // Show all team events as busy
+                      member.color
                     )}
                     style={getEventPosition(event)}
                     onClick={() => onEventClick(event)}
                   >
-                    <div className="font-medium truncate">Busy</div>
+                    <div className="font-medium truncate">{event.title}</div>
                     <div className="text-xs opacity-80 truncate">{event.start} - {event.end}</div>
                   </div>
                 ))}
@@ -165,7 +219,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                 <AvatarImage src={member.avatarUrl} alt={member.name} />
                 <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <div className="text-xs truncate">{member.name}</div>
+              <div className="text-xs font-medium truncate">{member.name}</div>
               <div className="text-xs text-gray-500 truncate">{member.email}</div>
             </div>
           ))}
@@ -186,7 +240,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
           </div>
           
           {/* Team member columns */}
-          {teamMembers.map((member, memberIndex) => (
+          {teamMembers.map((member) => (
             <div 
               key={member.id}
               className="flex-1 relative border-r border-gray-200 last:border-r-0"
@@ -199,38 +253,21 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                 />
               ))}
               
-              {/* Sample events for display */}
-              {memberIndex === 0 && (
-                <>
-                  <div
-                    className="absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity bg-yellow-100 text-yellow-800 border-yellow-200"
-                    style={{ top: '690px', height: '60px' }}
-                    onClick={() => onEventClick(events[0] || { id: 'sample', title: 'Busy', start: '11:30 AM', end: '12:30 PM', type: 'busy', date: new Date() })}
-                  >
-                    <div className="font-medium truncate">Busy</div>
-                    <div className="text-xs opacity-80 truncate">11:30 AM - 12:30 PM</div>
-                  </div>
-                  <div
-                    className="absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity bg-yellow-100 text-yellow-800 border-yellow-200"
-                    style={{ top: '1020px', height: '60px' }}
-                    onClick={() => onEventClick(events[1] || { id: 'sample2', title: 'Busy', start: '5:00 PM', end: '6:00 PM', type: 'busy', date: new Date() })}
-                  >
-                    <div className="font-medium truncate">Busy</div>
-                    <div className="text-xs opacity-80 truncate">5:00 PM - 6:00 PM</div>
-                  </div>
-                </>
-              )}
-
-              {memberIndex === 1 && (
+              {/* Events for this team member */}
+              {getMemberEvents(member.id).map((event, eventIndex) => (
                 <div
-                  className="absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity bg-yellow-100 text-yellow-800 border-yellow-200"
-                  style={{ top: '1140px', height: '60px' }}
-                  onClick={() => onEventClick(events[2] || { id: 'sample3', title: 'Busy', start: '7:00 PM', end: '8:00 PM', type: 'busy', date: new Date() })}
+                  key={eventIndex}
+                  className={cn(
+                    "absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
+                    member.color
+                  )}
+                  style={getEventPosition(event)}
+                  onClick={() => onEventClick(event)}
                 >
-                  <div className="font-medium truncate">Busy</div>
-                  <div className="text-xs opacity-80 truncate">7:00 PM - 8:00 PM</div>
+                  <div className="font-medium truncate">{event.title}</div>
+                  <div className="text-xs opacity-80 truncate">{event.start} - {event.end}</div>
                 </div>
-              )}
+              ))}
             </div>
           ))}
         </div>
