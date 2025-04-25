@@ -137,11 +137,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
       <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
         {/* Main container with fixed width columns */}
         <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-          {/* Header row with time label and team members */}
+          {/* Header row with team members */}
           <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-            {/* Fixed time label cell */}
+            {/* Empty cell in place of Time label */}
             <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
-              <div className="text-xs text-gray-500 text-center">Time</div>
+              {/* This cell is intentionally left empty */}
             </div>
             
             {/* Team member headers */}
@@ -153,7 +153,6 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                     <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="text-xs font-medium">{member.name}</div>
-                  <div className="text-xs text-gray-500 truncate">{member.email}</div>
                 </div>
               </div>
             ))}
@@ -168,7 +167,8 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                   key={index}
                   className="h-[60px] border-b border-gray-200 px-2 flex items-start pt-1 text-xs text-gray-500"
                 >
-                  {time}
+                  {/* Leave the first time slot empty */}
+                  {index > 0 ? time : ''}
                 </div>
               ))}
             </div>
@@ -215,13 +215,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
       {/* Main container with fixed width columns */}
       <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-        {/* Header row with date and team members */}
+        {/* Header row with team members */}
         <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-          {/* Fixed time label cell */}
+          {/* Empty cell in place of Time label */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
-            <div className="text-center text-xs text-gray-500">
-              Time
-            </div>
+            {/* This cell is intentionally left empty */}
           </div>
           
           {/* Team member headers */}
@@ -233,7 +231,6 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                   <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-xs font-medium">{member.name}</div>
-                <div className="text-xs text-gray-500 truncate">{member.email}</div>
               </div>
             </div>
           ))}
@@ -248,7 +245,8 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                 key={index}
                 className="h-[60px] border-b border-gray-200 px-2 flex items-start pt-1 text-xs text-gray-500"
               >
-                {time}
+                {/* Leave the first time slot empty */}
+                {index > 0 ? time : ''}
               </div>
             ))}
           </div>
