@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   Search, Bell, MessageSquare, Settings, ChevronLeft, 
-  Users, Calendar, LayoutDashboard, Package2
+  Users, Calendar, LayoutDashboard, Package2, UserRound
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
@@ -60,6 +60,16 @@ const DashboardLayout = ({ children, title }: DashboardLayoutProps) => {
               location.pathname === "/services-products" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
             )}>
               <Package2 className="h-5 w-5" />
+            </div>
+          </Link>
+
+          {/* Coach Profile */}
+          <Link to="/coach-profile">
+            <div className={cn(
+              "p-2 rounded-md transition-colors",
+              location.pathname === "/coach-profile" ? "bg-primary/10 text-primary" : "text-gray-500 hover:text-primary"
+            )}>
+              <UserRound className="h-5 w-5" />
             </div>
           </Link>
         </div>
