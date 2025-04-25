@@ -130,11 +130,14 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   if (view === 'day') {
     return (
       <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-        <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
-          {/* Header with time column and team members - Fixed to prevent overlap */}
-          <div className="sticky top-0 z-10 grid grid-cols-[80px_repeat(3,_1fr)] border-b border-gray-200 bg-white w-full">
-            {/* Fixed blank cell above time column */}
-            <div className="w-[80px] p-2 border-r border-gray-200 bg-white"></div>
+        {/* Main container with fixed width columns */}
+        <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+          {/* Header row with time label and team members */}
+          <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+            {/* Fixed time label cell */}
+            <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
+              <div className="text-xs text-gray-500 text-center">Time</div>
+            </div>
             
             {/* Team member headers */}
             {teamMembers.map((member) => (
@@ -144,15 +147,15 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                     <AvatarImage src={member.avatarUrl} alt={member.name} />
                     <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                   </Avatar>
-                  <div className="text-xs font-medium truncate">{member.name}</div>
+                  <div className="text-xs font-medium">{member.name}</div>
                   <div className="text-xs text-gray-500 truncate">{member.email}</div>
                 </div>
               </div>
             ))}
           </div>
           
-          {/* Time grid with clear separation between time column and member columns */}
-          <div className="grid grid-cols-[80px_repeat(3,_1fr)] w-full">
+          {/* Calendar body grid with time slots and events */}
+          <div className="grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
             {/* Time slots column */}
             <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
               {timeSlots.map((time, index) => (
@@ -165,7 +168,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
               ))}
             </div>
             
-            {/* Team member columns - Separate from time column */}
+            {/* Team member columns with events */}
             {teamMembers.map((member) => (
               <div 
                 key={member.id}
@@ -205,10 +208,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   // For week view in team mode
   return (
     <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-      <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
-        {/* Header with time column and team members - Fixed to prevent overlap */}
-        <div className="sticky top-0 z-10 grid grid-cols-[80px_repeat(3,_1fr)] border-b border-gray-200 bg-white w-full">
-          {/* Fixed blank cell above time column */}
+      {/* Main container with fixed width columns */}
+      <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+        {/* Header row with date and team members */}
+        <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+          {/* Fixed date cell */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
             <div className="text-center text-xs font-medium">
               {format(currentDate, 'MMMM')}
@@ -226,15 +230,15 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                   <AvatarImage src={member.avatarUrl} alt={member.name} />
                   <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                 </Avatar>
-                <div className="text-xs font-medium truncate">{member.name}</div>
+                <div className="text-xs font-medium">{member.name}</div>
                 <div className="text-xs text-gray-500 truncate">{member.email}</div>
               </div>
             </div>
           ))}
         </div>
         
-        {/* Time grid with clear separation between time column and member columns */}
-        <div className="grid grid-cols-[80px_repeat(3,_1fr)] w-full">
+        {/* Calendar body grid with time slots and events */}
+        <div className="grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
           {/* Time slots column */}
           <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
             {timeSlots.map((time, index) => (
@@ -247,7 +251,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             ))}
           </div>
           
-          {/* Team member columns - Separate from time column */}
+          {/* Team member columns with events */}
           {teamMembers.map((member) => (
             <div 
               key={member.id}
