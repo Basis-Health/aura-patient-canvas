@@ -13,6 +13,7 @@ import Labs from "./pages/Labs";
 import Calendar from "./pages/Calendar";
 import Settings from "./pages/Settings";
 import CoachProfile from "./pages/CoachProfile";
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Index />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/clients" element={<Clients />} />
@@ -40,3 +42,4 @@ const App = () => (
 );
 
 export default App;
+
