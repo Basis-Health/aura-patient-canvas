@@ -129,28 +129,32 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   // For day view in team mode
   if (view === 'day') {
     return (
-      <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px]">
-        <div className="grid" style={{ gridTemplateColumns: `60px repeat(${teamMembers.length}, 1fr)` }}>
-          {/* Header with team members */}
-          <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white">
-            <div className="w-[60px] p-2 border-r border-gray-200"></div>
+      <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
+        <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
+          {/* Header with time column and team members */}
+          <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white w-full">
+            {/* Blank cell above time column */}
+            <div className="w-[80px] p-2 border-r border-gray-200 bg-white"></div>
             
+            {/* Team member headers */}
             {teamMembers.map((member) => (
               <div key={member.id} className="flex-1 p-2 text-center border-r border-gray-200 last:border-r-0">
-                <Avatar className="mx-auto mb-1 h-8 w-8">
-                  <AvatarImage src={member.avatarUrl} alt={member.name} />
-                  <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="text-xs font-medium truncate">{member.name}</div>
-                <div className="text-xs text-gray-500 truncate">{member.email}</div>
+                <div className="flex flex-col items-center">
+                  <Avatar className="mx-auto mb-1 h-8 w-8">
+                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="text-xs font-medium truncate">{member.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{member.email}</div>
+                </div>
               </div>
             ))}
           </div>
           
           {/* Time grid */}
-          <div className="flex">
+          <div className="flex w-full">
             {/* Time slots column */}
-            <div className="sticky left-0 w-[60px] bg-white border-r border-gray-200 z-10">
+            <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
               {timeSlots.map((time, index) => (
                 <div
                   key={index}
@@ -200,11 +204,12 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   
   // For week view in team mode
   return (
-    <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px]">
-      <div className="grid" style={{ gridTemplateColumns: `60px repeat(${teamMembers.length}, 1fr)` }}>
-        {/* Header with team members */}
-        <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white">
-          <div className="w-[60px] p-2 border-r border-gray-200">
+    <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
+      <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
+        {/* Header with time column and team members */}
+        <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white w-full">
+          {/* Blank cell above time column */}
+          <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
             <div className="text-center text-xs font-medium">
               {format(currentDate, 'MMMM')}
             </div>
@@ -213,22 +218,25 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             </div>
           </div>
           
+          {/* Team member headers */}
           {teamMembers.map((member) => (
             <div key={member.id} className="flex-1 p-2 text-center border-r border-gray-200 last:border-r-0">
-              <Avatar className="mx-auto mb-1 h-8 w-8">
-                <AvatarImage src={member.avatarUrl} alt={member.name} />
-                <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="text-xs font-medium truncate">{member.name}</div>
-              <div className="text-xs text-gray-500 truncate">{member.email}</div>
+              <div className="flex flex-col items-center">
+                <Avatar className="mx-auto mb-1 h-8 w-8">
+                  <AvatarImage src={member.avatarUrl} alt={member.name} />
+                  <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="text-xs font-medium truncate">{member.name}</div>
+                <div className="text-xs text-gray-500 truncate">{member.email}</div>
+              </div>
             </div>
           ))}
         </div>
         
         {/* Time grid */}
-        <div className="flex">
+        <div className="flex w-full">
           {/* Time slots column */}
-          <div className="sticky left-0 w-[60px] bg-white border-r border-gray-200 z-10">
+          <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
             {timeSlots.map((time, index) => (
               <div
                 key={index}
