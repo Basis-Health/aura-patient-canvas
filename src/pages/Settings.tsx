@@ -1,17 +1,21 @@
 
 import React from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import {
+  GeneralSettings,
+  SecuritySettings,
+  AISettings,
+  CookieSettings,
+} from "@/components/settings/SettingsSections";
 
 const Settings = () => {
   return (
     <DashboardLayout title="Settings">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">Application Settings</h2>
-          <p className="text-gray-600">
-            Manage your application preferences and account settings.
-          </p>
-        </div>
+      <div className="max-w-4xl mx-auto space-y-6 p-6">
+        <GeneralSettings />
+        <SecuritySettings />
+        <AISettings />
+        <CookieSettings />
       </div>
     </DashboardLayout>
   );
