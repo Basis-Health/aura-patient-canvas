@@ -131,14 +131,17 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     }
   };
   
+  // Define equal width columns for team members
+  const gridTemplateColumns = `80px repeat(${teamMembers.length}, 1fr)`;
+  
   // For day view in team mode
   if (view === 'day') {
     return (
       <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-        {/* Main container with fixed width columns */}
-        <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+        {/* Main container with equal width columns */}
+        <div className="w-full grid" style={{ gridTemplateColumns }}>
           {/* Header row with team members */}
-          <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+          <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns }}>
             {/* Empty cell in place of Time label */}
             <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
               {/* This cell is intentionally left empty */}
@@ -159,7 +162,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
           </div>
           
           {/* Calendar body grid with time slots and events */}
-          <div className="grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+          <div className="grid" style={{ gridTemplateColumns }}>
             {/* Time slots column */}
             <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
               {timeSlots.map((time, index) => (
@@ -192,7 +195,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                   <div
                     key={eventIndex}
                     className={cn(
-                      "absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
+                      "absolute left-0 right-0 px-2 py-1 mx-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
                       member.color
                     )}
                     style={getEventPosition(event)}
@@ -213,10 +216,10 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   // For week view in team mode
   return (
     <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-      {/* Main container with fixed width columns */}
-      <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+      {/* Main container with equal width columns */}
+      <div className="w-full grid" style={{ gridTemplateColumns }}>
         {/* Header row with team members */}
-        <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+        <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns }}>
           {/* Empty cell in place of Time label */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
             {/* This cell is intentionally left empty */}
@@ -237,7 +240,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
         </div>
         
         {/* Calendar body grid with time slots and events */}
-        <div className="grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
+        <div className="grid" style={{ gridTemplateColumns }}>
           {/* Time slots column */}
           <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
             {timeSlots.map((time, index) => (
@@ -270,7 +273,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
                 <div
                   key={eventIndex}
                   className={cn(
-                    "absolute left-1 right-1 px-2 py-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
+                    "absolute left-0 right-0 px-2 py-1 mx-1 rounded-md border text-xs font-medium cursor-pointer hover:opacity-90 transition-opacity",
                     member.color
                   )}
                   style={getEventPosition(event)}
