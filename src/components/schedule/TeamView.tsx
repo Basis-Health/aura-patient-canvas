@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { format, isToday, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -13,9 +14,10 @@ interface TeamViewProps {
 }
 
 const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events, onEventClick }) => {
-  const timeSlots = Array.from({ length: 24 }, (_, i) => {
-    const hour = i % 12 || 12;
-    const amPm = i < 12 ? 'AM' : 'PM';
+  // Create time slots starting at 5 AM instead of 12 AM
+  const timeSlots = Array.from({ length: 19 }, (_, i) => {
+    const hour = (i + 5) % 12 || 12;
+    const amPm = i + 5 < 12 ? 'AM' : 'PM';
     return `${hour} ${amPm}`;
   });
   
@@ -52,9 +54,13 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     const isPM = event.start.toLowerCase().includes('pm');
     const actualHour = isPM && startHour !== 12 ? startHour + 12 : startHour;
     
+    // Calculate offset based on 5am start
+    const hourOffset = actualHour - 5;
+    if (hourOffset < 0) return { top: '0px', height: '0px' }; // Hide events before 5am
+    
     // Add minutes
     const startMinute = parseInt(startTimeParts[1].split(' ')[0]) || 0;
-    const totalMinutes = actualHour * 60 + startMinute;
+    const totalMinutes = hourOffset * 60 + startMinute;
     
     // Calculate end time
     const endTimeParts = event.end.split(':');
@@ -62,7 +68,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     const endIsPM = event.end.toLowerCase().includes('pm');
     const actualEndHour = endIsPM && endHour !== 12 ? endHour + 12 : endHour;
     const endMinute = parseInt(endTimeParts[1].split(' ')[0]) || 0;
-    const totalEndMinutes = actualEndHour * 60 + endMinute;
+    const totalEndMinutes = (actualEndHour - 5) * 60 + endMinute;
     
     // Calculate height based on duration
     const durationMinutes = totalEndMinutes - totalMinutes;
@@ -211,7 +217,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
       <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
         {/* Header row with date and team members */}
         <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-          {/* Fixed date cell - Now just showing "Time" label */}
+          {/* Fixed time label cell */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
             <div className="text-center text-xs text-gray-500">
               Time
