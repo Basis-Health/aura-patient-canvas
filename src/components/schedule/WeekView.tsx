@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, isToday } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Event } from '@/types/calendar';
 
