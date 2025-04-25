@@ -26,22 +26,16 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     { 
       id: '1', 
       name: 'George', 
-      email: 'george@basishealth.io', 
-      avatarUrl: '', 
       color: 'bg-amber-100 text-amber-800 border-amber-200' 
     },
     { 
       id: '2', 
       name: 'Sarah', 
-      email: 'sarah@basishealth.io', 
-      avatarUrl: '', 
       color: 'bg-blue-100 text-blue-800 border-blue-200' 
     },
     { 
       id: '3', 
       name: 'Michael', 
-      email: 'michael@basishealth.io', 
-      avatarUrl: '', 
       color: 'bg-purple-100 text-purple-800 border-purple-200' 
     }
   ];
@@ -138,12 +132,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   if (view === 'day') {
     return (
       <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-        {/* Main container with equal width columns */}
-        <div className="w-full grid" style={{ gridTemplateColumns }}>
+        <div className="w-full">
           {/* Header row with team members */}
-          <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns }}>
-            {/* Empty cell in place of Time label */}
-            <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
+          <div className="grid sticky top-0 z-10 bg-white" style={{ gridTemplateColumns }}>
+            {/* Time column header (empty) */}
+            <div className="w-[80px] p-2 border-r border-gray-200">
               {/* This cell is intentionally left empty */}
             </div>
             
@@ -152,7 +145,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
               <div key={member.id} className="p-2 text-center border-r border-gray-200 last:border-r-0">
                 <div className="flex flex-col items-center">
                   <Avatar className="mx-auto mb-1 h-8 w-8">
-                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                    <AvatarImage alt={member.name} />
                     <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div className="text-xs font-medium">{member.name}</div>
@@ -161,7 +154,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             ))}
           </div>
           
-          {/* Calendar body grid with time slots and events */}
+          {/* Calendar body grid */}
           <div className="grid" style={{ gridTemplateColumns }}>
             {/* Time slots column */}
             <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
@@ -216,12 +209,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   // For week view in team mode
   return (
     <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
-      {/* Main container with equal width columns */}
-      <div className="w-full grid" style={{ gridTemplateColumns }}>
+      <div className="w-full">
         {/* Header row with team members */}
-        <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns }}>
-          {/* Empty cell in place of Time label */}
-          <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
+        <div className="grid sticky top-0 z-10 bg-white" style={{ gridTemplateColumns }}>
+          {/* Time column header (empty) */}
+          <div className="w-[80px] p-2 border-r border-gray-200">
             {/* This cell is intentionally left empty */}
           </div>
           
@@ -230,7 +222,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             <div key={member.id} className="p-2 text-center border-r border-gray-200 last:border-r-0">
               <div className="flex flex-col items-center">
                 <Avatar className="mx-auto mb-1 h-8 w-8">
-                  <AvatarImage src={member.avatarUrl} alt={member.name} />
+                  <AvatarImage alt={member.name} />
                   <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="text-xs font-medium">{member.name}</div>
@@ -239,7 +231,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
           ))}
         </div>
         
-        {/* Calendar body grid with time slots and events */}
+        {/* Calendar body grid */}
         <div className="grid" style={{ gridTemplateColumns }}>
           {/* Time slots column */}
           <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
