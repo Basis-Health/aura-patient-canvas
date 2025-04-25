@@ -131,14 +131,14 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
     return (
       <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
         <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
-          {/* Header with time column and team members */}
-          <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white w-full">
-            {/* Blank cell above time column */}
+          {/* Header with time column and team members - Fixed to prevent overlap */}
+          <div className="sticky top-0 z-10 grid grid-cols-[80px_repeat(3,_1fr)] border-b border-gray-200 bg-white w-full">
+            {/* Fixed blank cell above time column */}
             <div className="w-[80px] p-2 border-r border-gray-200 bg-white"></div>
             
             {/* Team member headers */}
             {teamMembers.map((member) => (
-              <div key={member.id} className="flex-1 p-2 text-center border-r border-gray-200 last:border-r-0">
+              <div key={member.id} className="p-2 text-center border-r border-gray-200 last:border-r-0">
                 <div className="flex flex-col items-center">
                   <Avatar className="mx-auto mb-1 h-8 w-8">
                     <AvatarImage src={member.avatarUrl} alt={member.name} />
@@ -151,8 +151,8 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             ))}
           </div>
           
-          {/* Time grid */}
-          <div className="flex w-full">
+          {/* Time grid with clear separation between time column and member columns */}
+          <div className="grid grid-cols-[80px_repeat(3,_1fr)] w-full">
             {/* Time slots column */}
             <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
               {timeSlots.map((time, index) => (
@@ -165,11 +165,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
               ))}
             </div>
             
-            {/* Team member columns */}
+            {/* Team member columns - Separate from time column */}
             {teamMembers.map((member) => (
               <div 
                 key={member.id}
-                className="flex-1 relative border-r border-gray-200 last:border-r-0"
+                className="relative border-r border-gray-200 last:border-r-0"
               >
                 {/* Time slot grid lines */}
                 {timeSlots.map((_, timeIndex) => (
@@ -206,9 +206,9 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
   return (
     <div className="border border-gray-200 rounded-md overflow-auto max-h-[600px] w-full">
       <div className="w-full" style={{ display: 'grid', gridTemplateColumns: '80px repeat(3, 1fr)' }}>
-        {/* Header with time column and team members */}
-        <div className="sticky top-0 z-10 flex border-b border-gray-200 bg-white w-full">
-          {/* Blank cell above time column */}
+        {/* Header with time column and team members - Fixed to prevent overlap */}
+        <div className="sticky top-0 z-10 grid grid-cols-[80px_repeat(3,_1fr)] border-b border-gray-200 bg-white w-full">
+          {/* Fixed blank cell above time column */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
             <div className="text-center text-xs font-medium">
               {format(currentDate, 'MMMM')}
@@ -220,7 +220,7 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
           
           {/* Team member headers */}
           {teamMembers.map((member) => (
-            <div key={member.id} className="flex-1 p-2 text-center border-r border-gray-200 last:border-r-0">
+            <div key={member.id} className="p-2 text-center border-r border-gray-200 last:border-r-0">
               <div className="flex flex-col items-center">
                 <Avatar className="mx-auto mb-1 h-8 w-8">
                   <AvatarImage src={member.avatarUrl} alt={member.name} />
@@ -233,8 +233,8 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
           ))}
         </div>
         
-        {/* Time grid */}
-        <div className="flex w-full">
+        {/* Time grid with clear separation between time column and member columns */}
+        <div className="grid grid-cols-[80px_repeat(3,_1fr)] w-full">
           {/* Time slots column */}
           <div className="sticky left-0 w-[80px] bg-white border-r border-gray-200 z-10">
             {timeSlots.map((time, index) => (
@@ -247,11 +247,11 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
             ))}
           </div>
           
-          {/* Team member columns */}
+          {/* Team member columns - Separate from time column */}
           {teamMembers.map((member) => (
             <div 
               key={member.id}
-              className="flex-1 relative border-r border-gray-200 last:border-r-0"
+              className="relative border-r border-gray-200 last:border-r-0"
             >
               {/* Time slot grid lines */}
               {timeSlots.map((_, timeIndex) => (
