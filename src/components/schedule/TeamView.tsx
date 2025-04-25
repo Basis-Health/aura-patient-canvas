@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { format, isToday, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -212,13 +211,10 @@ const TeamView: React.FC<TeamViewProps> = ({ currentDate, view, weekDays, events
       <div className="w-full grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
         {/* Header row with date and team members */}
         <div className="sticky top-0 z-10 grid" style={{ gridTemplateColumns: '80px repeat(3, minmax(200px, 1fr))' }}>
-          {/* Fixed date cell */}
+          {/* Fixed date cell - Now just showing "Time" label */}
           <div className="w-[80px] p-2 border-r border-gray-200 bg-white">
-            <div className="text-center text-xs font-medium">
-              {format(currentDate, 'MMMM')}
-            </div>
-            <div className="text-center text-sm font-bold">
-              {format(currentDate, 'd')}
+            <div className="text-center text-xs text-gray-500">
+              Time
             </div>
           </div>
           
