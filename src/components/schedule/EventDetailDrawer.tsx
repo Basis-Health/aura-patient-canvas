@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { 
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle
-} from '@/components/ui/drawer';
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet';
 import { Event } from '@/types/calendar';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, Copy, Edit, ExternalLink, MoreVertical, Trash, X } from 'lucide-react';
@@ -41,9 +41,9 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
   };
 
   return (
-    <Drawer open={open} onOpenChange={onClose}>
-      <DrawerContent className="h-[80vh] max-h-[80vh] overflow-auto">
-        <DrawerHeader className="flex items-center justify-between border-b pb-3">
+    <Sheet open={open} onOpenChange={onClose}>
+      <SheetContent className="max-h-screen overflow-y-auto w-[400px] sm:w-[450px]">
+        <SheetHeader className="flex items-center justify-between border-b pb-3">
           <div className="flex items-center">
             <div 
               className={cn(
@@ -54,7 +54,7 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
                 event.type === 'busy' && "bg-yellow-500"
               )} 
             />
-            <DrawerTitle className="text-lg font-bold">{event.title}</DrawerTitle>
+            <SheetTitle className="text-lg font-bold">{event.title}</SheetTitle>
           </div>
           <div className="flex gap-1">
             <Button variant="ghost" size="icon" onClick={handleEdit}>
@@ -66,13 +66,13 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
             <Button variant="ghost" size="icon" onClick={handleCopy}>
               <Copy className="h-4 w-4" />
             </Button>
-            <DrawerClose asChild>
+            <SheetClose asChild>
               <Button variant="ghost" size="icon">
                 <X className="h-4 w-4" />
               </Button>
-            </DrawerClose>
+            </SheetClose>
           </div>
-        </DrawerHeader>
+        </SheetHeader>
 
         <div className="p-4 space-y-6">
           {/* Date and time */}
@@ -181,8 +181,8 @@ const EventDetailDrawer: React.FC<EventDetailDrawerProps> = ({ event, open, onCl
             </div>
           </div>
         </div>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 };
 
