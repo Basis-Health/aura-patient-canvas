@@ -1,4 +1,3 @@
-
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, Calendar as CalendarIcon, Clock, MoreVertical, User, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Mock data for the dashboard
 const mockAlerts = [
   { id: "1", patient: "Maria Johnson", issue: "Blood test results show elevated LDL cholesterol levels", priority: "high", date: "2025-04-09T08:30:00Z" },
   { id: "2", patient: "James Wilson", issue: "Missed appointment for follow-up consultation", priority: "medium", date: "2025-04-08T14:15:00Z" },
@@ -172,6 +170,23 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* New Form Components Link */}
+        <div className="md:col-span-3 mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Form Components</CardTitle>
+              <CardDescription>Explore new form input components</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link to="/form-components">
+                <Button variant="outline" className="w-full">
+                  View Form Components
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </DashboardLayout>

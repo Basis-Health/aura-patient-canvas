@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,7 @@ import Calendar from "./pages/Calendar";
 import Settings from "./pages/Settings";
 import CoachProfile from "./pages/CoachProfile";
 import Login from "./pages/Login";
+import FormComponents from "./pages/FormComponents";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +33,7 @@ const App = () => (
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/coach-profile" element={<CoachProfile />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/form-components" element={<FormComponents />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
@@ -42,4 +42,3 @@ const App = () => (
 );
 
 export default App;
-
